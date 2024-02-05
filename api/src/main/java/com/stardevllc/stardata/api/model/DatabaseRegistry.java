@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Parent class for the SQL Entry point, this will be used for other database types when they get implemented
- * @param <D> The databse type
+ * Parent Registry class that defines the basics of a DatabaseRegistry. Extends from StringRegistry
+ * @param <D> The type of Database that this Registry Represents
  */
 public abstract class DatabaseRegistry<D extends Database> extends StringRegistry<D> {
     protected final Logger logger;

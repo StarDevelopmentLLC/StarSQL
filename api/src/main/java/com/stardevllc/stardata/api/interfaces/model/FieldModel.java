@@ -7,6 +7,10 @@ import com.stardevllc.stardata.api.interfaces.TypeHandler;
 
 import java.lang.reflect.Field;
 
+/**
+ * Represents a Field within a ClassModel which caches calculated values to make it easier and faster to get important information.
+ * @param <T>
+ */
 public interface FieldModel<T extends Database> extends Comparable<FieldModel<T>> {
     /**
      * @return The field that this model represents.

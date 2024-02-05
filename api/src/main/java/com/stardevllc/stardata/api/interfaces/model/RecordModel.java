@@ -5,6 +5,9 @@ import com.stardevllc.stardata.api.interfaces.ObjectCodec;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Represents a single record within a database. Please see implementing documentation to see how things are handled.
+ */
 public interface RecordModel {
 
     /**

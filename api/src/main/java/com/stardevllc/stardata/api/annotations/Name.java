@@ -3,7 +3,7 @@ package com.stardevllc.stardata.api.annotations;
 import java.lang.annotation.*;
 
 /**
- * This annotation allows customization of the name of columns and tables in the database. This annotation has the highest priority for naming columns and tables.
+ * This annotation allows customization of the name of models and keys. This annotation has the highest priority for naming these things.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})

@@ -2,19 +2,18 @@ package com.stardevllc.stardata.api.interfaces.model;
 
 import com.stardevllc.stardata.api.model.DatabaseRegistry;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Represents a generic database, only really used for SQL based things for now. <br>
+ * Represents a generic database<br>
  * See {@link Database} for more information.
  */
 public interface Database {
     /**
-     * Registers a table to this database
-     *
-     * @param clazz The table to register
+     * Registers a class that represents a group of data like a "table" in SQL based applications. <br>
+     * Please see your used Database type documentation to see how this is organized
+     * @param clazz The class to register
      */
     void registerClass(Class<?> clazz);
 
@@ -40,25 +39,25 @@ public interface Database {
      * Gets Objects of the class provided. This will still return a list even if it is just one<br>
      * The two arrays must match each other in both length and what you want to do. The index of the first one will map to the index of the second one.
      *
-     * @param clazz  The class of the table
-     * @param keys   The Array of Columns to base the query on. This must match the values
+     * @param clazz  The model class
+     * @param keys   The Array of keys to base the query on. This must match the values
      * @param values The array of values based on columns. This must match the columns
-     * @param <T>    The type of the table
+     * @param <T>    The type of the model class
      * @return The list of objects that Match. This should never return a null object. If there is nothing that matches, it will be an empty list.
-     * @throws SQLException Any SQL errors that happen
+     * @throws Exception Any errors that occur
      */
     @Deprecated
     <T> List<T> get(Class<T> clazz, String[] keys, Object[] values) throws Exception;
 
     /**
-     * Gets objects based on a column and a value. This will still return a list even if it is just one that matches
+     * Gets objects based on a key and a value. This will still return a list even if it is just one that matches
      *
-     * @param clazz The class of the table
-     * @param key   The column to select based on
+     * @param clazz The model class
+     * @param key   The key to select based on
      * @param value The value to select based on
-     * @param <T>   The type of the table
+     * @param <T>   The type of the model
      * @return The list of objects that match
-     * @throws SQLException Any SQL errors
+     * @throws Exception Any errors
      */
     @Deprecated
     <T> List<T> get(Class<T> clazz, String key, Object value) throws Exception;
@@ -66,15 +65,15 @@ public interface Database {
     /**
      * Gets all objects based on a type
      *
-     * @param clazz The class of the table
-     * @param <T>   The type of the table
+     * @param clazz The model class
+     * @param <T>   The type of the model
      * @return The list of objects that match
-     * @throws SQLException Any SQL errors
+     * @throws Exception Any errors
      */
     <T> List<T> get(Class<T> clazz) throws Exception;
 
     /**
-     * Saves an object to the database while catching {@link SQLException}s
+     * Saves an object to the database while catching {@link Exception}s
      *
      * @param object The object to save to the database
      */
@@ -92,7 +91,7 @@ public interface Database {
      * Deletes an object from the database while catching {@link Exception}'s
      *
      * @param clazz The class of the table
-     * @param id    The ID to delete. This is the the Primary Column value based on either auto-detection or the @ID annotation
+     * @param id    The ID to delete. This is the the Primary Key value
      */
     void deleteSilent(Class<?> clazz, Object id);
 
@@ -105,7 +104,7 @@ public interface Database {
 
     /**
      * Deletes an Object from the database<br>
-     * Note: This will throw an {@link IllegalArgumentException} if no table is found
+     * Note: This will throw an {@link IllegalArgumentException} if no model  is found
      *
      * @param object The object to delete
      * @throws Exception Any errors that happen
@@ -115,22 +114,22 @@ public interface Database {
     /**
      * Deletes an object from the database
      *
-     * @param clazz The table class
-     * @param id    The id to delete. This is the the Primary Column value based on either auto-detection or the @ID annotation
+     * @param clazz The model class
+     * @param id    The id to delete. This is the the Primary Key value
      * @throws Exception Any errors that happen
      */
     void delete(Class<?> clazz, Object id) throws Exception;
 
     /**
      * Adds an object to the Queue.
-     * This queue is to allow pushing many objects in a single connection
+     * This queue is to allow pushing many objects in a single processing step
      *
      * @param object The object to add
      */
     void queue(Object object);
 
     /**
-     * Flushes the queue. This does catch SQL Exceptions
+     * Flushes the queue. This does catch Exceptions
      */
     void flush();
 

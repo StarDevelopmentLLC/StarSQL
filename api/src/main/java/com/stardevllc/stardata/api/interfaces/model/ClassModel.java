@@ -2,6 +2,10 @@ package com.stardevllc.stardata.api.interfaces.model;
 
 import java.util.Set;
 
+/**
+ * Represents a structure within a database. This is intended to cache values that the methods return to prevent constant heavy processing.
+ * @param <T> The Database type of this Database Model Class
+ */
 public interface ClassModel<T extends Database> extends Comparable<ClassModel<T>> {
 
     /**
