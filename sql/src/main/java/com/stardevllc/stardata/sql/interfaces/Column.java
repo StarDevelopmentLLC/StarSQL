@@ -6,8 +6,8 @@ import com.stardevllc.stardata.api.annotations.Type;
 import com.stardevllc.stardata.api.interfaces.ObjectCodec;
 import com.stardevllc.stardata.api.interfaces.TypeHandler;
 import com.stardevllc.stardata.api.interfaces.model.FieldModel;
-import com.stardevllc.stardata.api.model.FKAction;
-import com.stardevllc.stardata.api.model.ForeignKeyStorageInfo;
+import com.stardevllc.stardata.sql.FKAction;
+import com.stardevllc.stardata.sql.ForeignKeyStorageInfo;
 import com.stardevllc.stardata.sql.statements.SqlColumnKey;
 
 import java.util.List;

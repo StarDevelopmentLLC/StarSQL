@@ -11,7 +11,7 @@ repositories {
 }
 
 group 'com.stardevllc.stardata'
-version '0.0.1-SNAPSHOT'
+version '0.0.2-SNAPSHOT'
 
 shadowJar {
     configurations = [project.configurations.compileClasspath]

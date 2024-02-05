@@ -1,4 +1,4 @@
-package com.stardevllc.stardata.api.model;
+package com.stardevllc.stardata.sql;
 
 public enum JoinType {
     LEFT, RIGHT, INNER, CROSS

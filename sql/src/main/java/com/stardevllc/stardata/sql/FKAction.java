@@ -1,4 +1,4 @@
-package com.stardevllc.stardata.api.model;
+package com.stardevllc.stardata.sql;
 
 /**
  * See the SQL Documentation for your chosen server for what these do. <br>

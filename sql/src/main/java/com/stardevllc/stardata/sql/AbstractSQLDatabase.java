@@ -7,8 +7,6 @@ import com.stardevllc.stardata.sql.interfaces.Row;
 import com.stardevllc.stardata.sql.interfaces.SQLDatabase;
 import com.stardevllc.stardata.sql.interfaces.Table;
 import com.stardevllc.stardata.api.model.DatabaseRegistry;
-import com.stardevllc.stardata.api.model.ForeignKeyStorageInfo;
-import com.stardevllc.stardata.api.model.JoinType;
 import com.stardevllc.stardata.sql.statements.SqlSelect;
 import com.stardevllc.starlib.reflection.ReflectionHelper;
 

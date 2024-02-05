@@ -2,7 +2,7 @@ package com.stardevllc.stardata.sql.interfaces;
 
 import com.stardevllc.stardata.api.interfaces.model.Database;
 import com.stardevllc.stardata.api.interfaces.TypeHandler;
-import com.stardevllc.stardata.api.model.JoinType;
+import com.stardevllc.stardata.sql.JoinType;
 
 import java.sql.SQLException;
 import java.util.List;

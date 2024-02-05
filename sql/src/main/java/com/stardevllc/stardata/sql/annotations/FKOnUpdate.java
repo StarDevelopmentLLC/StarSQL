@@ -1,6 +1,6 @@
 package com.stardevllc.stardata.sql.annotations;
 
-import com.stardevllc.stardata.api.model.FKAction;
+import com.stardevllc.stardata.sql.FKAction;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

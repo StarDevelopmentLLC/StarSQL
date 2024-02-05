@@ -7,8 +7,6 @@ import com.stardevllc.stardata.api.interfaces.model.FieldModel;
 import com.stardevllc.stardata.sql.interfaces.Column;
 import com.stardevllc.stardata.sql.interfaces.SQLDatabase;
 import com.stardevllc.stardata.sql.interfaces.Table;
-import com.stardevllc.stardata.api.model.FKAction;
-import com.stardevllc.stardata.api.model.ForeignKeyStorageInfo;
 import com.stardevllc.stardata.sql.annotations.AutoIncrement;
 import com.stardevllc.stardata.sql.annotations.DBNotNull;
 import com.stardevllc.stardata.sql.annotations.FKOnDelete;

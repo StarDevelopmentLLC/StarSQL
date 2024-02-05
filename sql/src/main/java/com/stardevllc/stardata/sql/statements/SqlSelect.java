@@ -1,6 +1,6 @@
 package com.stardevllc.stardata.sql.statements;
 
-import com.stardevllc.stardata.api.model.JoinType;
+import com.stardevllc.stardata.sql.JoinType;
 import com.stardevllc.stardata.sql.interfaces.Column;
 import com.stardevllc.stardata.sql.interfaces.SQLDatabase;
 import com.stardevllc.stardata.sql.interfaces.Table;
