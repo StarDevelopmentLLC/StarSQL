@@ -11,7 +11,7 @@ repositories {
     }
 }
 
-group 'com.stardevllc.starSQL'
+group 'com.stardevllc.starsql'
 version '1.0.0-alpha.1'
 
 shadowJar {

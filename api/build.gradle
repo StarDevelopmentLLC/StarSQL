@@ -28,4 +28,5 @@ shadowJar {
 }
 
 jar.finalizedBy(shadowJar)
+publishToMavenLocal.dependsOn(shadowJar)
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

@@ -21,6 +21,7 @@ shadowJar {
 }
 
 jar.finalizedBy(shadowJar)
+publishToMavenLocal.dependsOn(shadowJar)
 
 dependencies {
     api project(':common')
