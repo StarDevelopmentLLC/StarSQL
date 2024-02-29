@@ -10,19 +10,19 @@ repositories {
     }
 }
 
-group 'com.stardevllc.stardata'
+group 'com.stardevllc.starSQL'
 version '1.0.0-alpha.1'
 
 shadowJar {
-    archiveBaseName.set("StarData-PostgreSQL")
+    archiveBaseName.set("StarSQL-PostgreSQL")
     archiveClassifier.set("")
-    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
+    destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 
 dependencies {
-    api project(':sql')
+    api project(':common')
     api 'org.postgresql:postgresql:42.6.0'
 }
 

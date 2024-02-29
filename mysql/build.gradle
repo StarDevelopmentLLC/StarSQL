@@ -10,20 +10,20 @@ repositories {
     }
 }
 
-group 'com.stardevllc.stardata'
+group 'com.stardevllc.starsql'
 version '1.0.0-alpha.1'
 
 shadowJar {
     exclude('com.google.protobuf')
-    archiveBaseName.set("StarData-MySQL")
+    archiveBaseName.set("StarSQL-MySQL")
     archiveClassifier.set("")
-    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
+    destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 
 dependencies {
-    api project(':sql')
+    api project(':common')
     api('com.mysql:mysql-connector-j:8.1.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }
