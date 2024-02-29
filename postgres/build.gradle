@@ -11,6 +11,14 @@ repositories {
     }
 }
 
+publishing {
+    publications {
+        shadow(org.gradle.api.publish.maven.MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
+}
+
 group 'com.stardevllc.starsql'
 version '1.0.0-alpha.1'
 
