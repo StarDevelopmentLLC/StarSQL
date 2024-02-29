@@ -19,7 +19,7 @@ shadowJar {
     dependencies {
           exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.2'))
     } 
-    destinationDirectory = file("${project.rootDir}" + File.separator + "build")
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)

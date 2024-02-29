@@ -16,7 +16,7 @@ version '1.0.0-alpha.1'
 shadowJar {
     archiveBaseName.set("StarSQL-H2")
     archiveClassifier.set("")
-    destinationDirectory = file("${project.rootDir}" + File.separator + "build")
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
