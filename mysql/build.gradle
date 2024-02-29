@@ -11,29 +11,22 @@ repositories {
 }
 
 group 'com.stardevllc.stardata'
-version '0.0.2-SNAPSHOT'
+version '1.0.0-alpha.1'
 
 shadowJar {
-    minimize()
     exclude('com.google.protobuf')
-    relocate 'com.mysql', 'com.stardevllc.stardata.driver.mysql'
-    relocate 'com.stardevllc.starlib', 'com.stardevllc.stardata.starlib'
     archiveBaseName.set("StarData-MySQL")
-}
-
-jar {
-    archiveBaseName.set("StarData-MySQL")
+    archiveClassifier.set("")
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 
 dependencies {
-    api project(path: ':api', configuration: 'shadow')
     api project(':sql')
     api('com.mysql:mysql-connector-j:8.1.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }
-    compileOnly 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

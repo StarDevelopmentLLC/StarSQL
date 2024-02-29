@@ -11,26 +11,19 @@ repositories {
 }
 
 group 'com.stardevllc.stardata'
-version '0.0.2-SNAPSHOT'
+version '1.0.0-alpha.1'
 
 shadowJar {
-    minimize()
-    relocate 'org.postgresql', 'com.stardevllc.stardata.driver.postgresql'
-    relocate 'com.stardevllc.starlib', 'com.stardevllc.stardata.starlib'
     archiveBaseName.set("StarData-PostgreSQL")
-}
-
-jar {
-    archiveBaseName.set("StarData-PostgreSQL")
+    archiveClassifier.set("")
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 
 dependencies {
-    api project(path: ':api', configuration: 'shadow')
     api project(':sql')
     api 'org.postgresql:postgresql:42.6.0'
-    compileOnly 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

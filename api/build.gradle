@@ -11,22 +11,20 @@ repositories {
 }
 
 group 'com.stardevllc.stardata'
-version '0.0.2-SNAPSHOT'
+version '1.0.0-alpha.1'
 
 dependencies {
-    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
+    api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.2'
 }
 
 shadowJar {
-    minimize()
-    relocate 'com.stardevllc.starlib', 'com.stardevllc.stardata.starlib'
     archiveBaseName.set("StarData-API")
-}
-
-jar {
-    archiveBaseName.set("StarData-API")
+    archiveClassifier.set("")
+    dependencies {
+        exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.2'))
+    }
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
-
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

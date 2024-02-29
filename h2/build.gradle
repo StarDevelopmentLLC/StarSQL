@@ -11,26 +11,19 @@ repositories {
 }
 
 group 'com.stardevllc.stardata'
-version '0.0.2-SNAPSHOT'
+version '1.0.0-alpha.1'
 
 shadowJar {
-    minimize()
-    relocate 'org.h2', 'com.stardevllc.stardata.driver.h2'
-    relocate 'com.stardevllc.starlib', 'com.stardevllc.stardata.starlib'
     archiveBaseName.set("StarData-H2")
-}
-
-jar {
-    archiveBaseName.set("StarData-H2")
+    archiveClassifier.set("")
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 
 dependencies {
-    api project(path: ':api', configuration: 'shadow')
     api project(':sql')
     api 'com.h2database:h2:2.2.220'
-    compileOnly 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

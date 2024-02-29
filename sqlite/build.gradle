@@ -11,26 +11,19 @@ repositories {
 }
 
 group 'com.stardevllc.stardata'
-version '0.0.2-SNAPSHOT'
+version '1.0.0-alpha.1'
 
 shadowJar {
-    minimize()
-    relocate 'org.sqlite', 'com.stardevllc.stardata.driver.sqlite'
-    relocate 'com.stardevllc.starlib', 'com.stardevllc.stardata.starlib'
     archiveBaseName.set("StarData-SQLite")
-}
-
-jar {
-    archiveBaseName.set("StarData-SQLite")
+    archiveClassifier.set("")
+    //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 
 dependencies {
-    api project(path: ':api', configuration: 'shadow')
     api project(':sql')
     api 'org.xerial:sqlite-jdbc:3.43.0.0'
-    compileOnly 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.1'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
