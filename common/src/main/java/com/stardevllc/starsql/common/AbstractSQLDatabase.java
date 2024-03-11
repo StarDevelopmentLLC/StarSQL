@@ -11,6 +11,7 @@ import com.stardevllc.starsql.api.model.ForeignKeyStorageInfo;
 import com.stardevllc.starsql.api.statements.JoinType;
 import com.stardevllc.starsql.api.statements.SqlSelect;
 import com.stardevllc.starlib.reflection.ReflectionHelper;
+import com.stardevllc.starsql.api.statements.WhereClause;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -238,6 +239,28 @@ public abstract class AbstractSQLDatabase implements SQLDatabase {
     }
 
     @Override
+    public <T> List<T> get(Class<T> clazz, WhereClause whereClause) throws Exception {
+        Table table = getTable(clazz);
+        if (table == null) {
+            return new ArrayList<>();
+        }
+
+        SqlSelect select = new SqlSelect(table, true);
+
+        select.whereClause(whereClause);
+
+        List<Row> rows = executeQuery(select.build());
+
+        List<T> objects = new ArrayList<>();
+        for (Row row : rows) {
+            objects.add(parseObjectFromRow(clazz, row));
+        }
+
+        return objects;
+    }
+
+    @Override
+    @Deprecated
     public <T> List<T> get(Class<T> clazz, String[] columns, Object[] values) throws Exception {
         if (columns == null || values == null) {
             throw new IllegalArgumentException("Columns or Values are null");

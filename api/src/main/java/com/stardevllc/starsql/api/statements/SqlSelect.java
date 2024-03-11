@@ -60,7 +60,7 @@ public class SqlSelect implements SqlStatement {
             table.getColumns().forEach(column -> columns.add(new SqlColumnKey(this.tableName, column.getName(), null)));
         }
     }
-
+    
     public SqlSelect columns(String... columns) {
         if (columns != null) {
             for (String column : columns) {
@@ -115,6 +115,14 @@ public class SqlSelect implements SqlStatement {
     
     public SqlSelect where(Consumer<WhereClause> consumer) {
         consumer.accept(this.whereClause);
+        return this;
+    }
+    
+    public SqlSelect whereClause(WhereClause clause) {
+        if (clause != null) {
+            this.whereClause = clause;
+        }
+        
         return this;
     }
 
