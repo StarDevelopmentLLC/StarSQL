@@ -82,13 +82,6 @@ public class SQLDatabaseRegistry extends DatabaseRegistry<SQLDatabase> {
     public void registerAll(Collection<SQLDatabase> objects) {
         for (SQLDatabase database : objects) {
             register(database);
-            for (Table table : database.getTables()) {
-                try {
-                    database.execute(table.generateCreationStatement());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
     
