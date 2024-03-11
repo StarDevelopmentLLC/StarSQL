@@ -62,7 +62,7 @@ public class SQLDatabaseRegistry extends DatabaseRegistry<SQLDatabase> {
     public void register(SQLDatabase object) {
         super.register(object.getName(), object);
         object.setRegistry(this);
-        if (!this.setup) {
+        if (this.setup) {
             try {
                 object.setup();
             } catch (Exception e) {
