@@ -75,7 +75,9 @@ public abstract class AbstractSQLDatabase implements SQLDatabase {
                     e.printStackTrace();
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

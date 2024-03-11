@@ -1,8 +1,7 @@
 package com.stardevllc.starsql.common;
 
-import com.stardevllc.starsql.api.interfaces.model.SQLDatabase;
-import com.stardevllc.starsql.api.interfaces.model.Table;
 import com.stardevllc.starsql.api.interfaces.TypeHandler;
+import com.stardevllc.starsql.api.interfaces.model.SQLDatabase;
 import com.stardevllc.starsql.api.model.DatabaseRegistry;
 import com.stardevllc.starsql.common.typehandlers.SQLTypeHandler;
 
