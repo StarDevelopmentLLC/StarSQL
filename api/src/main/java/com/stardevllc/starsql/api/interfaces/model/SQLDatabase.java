@@ -2,6 +2,7 @@ package com.stardevllc.starsql.api.interfaces.model;
 
 import com.stardevllc.starsql.api.interfaces.TypeHandler;
 import com.stardevllc.starsql.api.statements.JoinType;
+import com.stardevllc.starsql.api.statements.WhereClause;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -114,6 +115,16 @@ public interface SQLDatabase extends Database {
      * @return The registered table or null if one does not exist
      */
     Table getTable(Class<?> clazz);
+
+    /**
+     * Gets the objects of the class provided
+     * @param clazz The table class
+     * @param whereClause The clause
+     * @return The list of values
+     * @param <T> The type
+     * @throws Exception Any errors
+     */
+    <T> List<T> get(Class<T> clazz, WhereClause whereClause) throws Exception;
 
     @Deprecated
     <T> List<T> join(Class<T> joinHolderClass, JoinType joinType, Class<?> leftSide, Class<?> rightSide) throws Exception;

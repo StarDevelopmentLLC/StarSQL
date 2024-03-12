@@ -167,6 +167,14 @@ public class SqlSelect implements SqlStatement {
         this.joinClauses.add(joinClause);
         return this;
     }
+    
+    public SqlSelect joinClause(JoinClause joinClause) {
+        if (joinClause != null) {
+            this.joinClauses.add(joinClause);
+        }
+        
+        return this;
+    }
 
     public String build() {
         StringBuilder sb = new StringBuilder("SELECT ");

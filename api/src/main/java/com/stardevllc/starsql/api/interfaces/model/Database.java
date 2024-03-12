@@ -51,16 +51,6 @@ public interface Database {
     <T> List<T> get(Class<T> clazz, String[] keys, Object[] values) throws Exception;
 
     /**
-     * Gets the objects of the class provided
-     * @param clazz The table class
-     * @param whereClause The clause
-     * @return The list of values
-     * @param <T> The type
-     * @throws Exception Any errors
-     */
-    <T> List<T> get(Class<T> clazz, WhereClause whereClause) throws Exception;
-
-    /**
      * Gets objects based on a key and a value. This will still return a list even if it is just one that matches
      *
      * @param clazz The model class

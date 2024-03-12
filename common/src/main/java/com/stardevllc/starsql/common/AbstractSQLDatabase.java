@@ -1,16 +1,12 @@
 package com.stardevllc.starsql.common;
 
+import com.stardevllc.starlib.reflection.ReflectionHelper;
 import com.stardevllc.starsql.api.interfaces.TypeHandler;
-import com.stardevllc.starsql.api.interfaces.model.Database;
-import com.stardevllc.starsql.api.interfaces.model.Column;
-import com.stardevllc.starsql.api.interfaces.model.Row;
-import com.stardevllc.starsql.api.interfaces.model.SQLDatabase;
-import com.stardevllc.starsql.api.interfaces.model.Table;
+import com.stardevllc.starsql.api.interfaces.model.*;
 import com.stardevllc.starsql.api.model.DatabaseRegistry;
 import com.stardevllc.starsql.api.model.ForeignKeyStorageInfo;
 import com.stardevllc.starsql.api.statements.JoinType;
 import com.stardevllc.starsql.api.statements.SqlSelect;
-import com.stardevllc.starlib.reflection.ReflectionHelper;
 import com.stardevllc.starsql.api.statements.WhereClause;
 
 import java.lang.reflect.Constructor;
@@ -24,7 +20,6 @@ import java.util.logging.Logger;
 public abstract class AbstractSQLDatabase implements SQLDatabase {
     protected Logger logger;
     protected String url, name, user, password;
-    protected boolean primary;
     protected Set<Table> tables = new LinkedHashSet<>();
     protected Set<TypeHandler<SQLDatabase>> typeHandlers = new HashSet<>();
     protected SQLDatabaseRegistry registry;
@@ -682,15 +677,6 @@ public abstract class AbstractSQLDatabase implements SQLDatabase {
             }
             return rows;
         }
-    }
-
-    /**
-     * Don't use
-     *
-     * @return Don't use
-     */
-    public boolean isPrimary() {
-        return primary;
     }
 
     @Override

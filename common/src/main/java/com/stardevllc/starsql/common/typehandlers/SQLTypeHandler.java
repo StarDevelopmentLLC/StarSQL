@@ -61,7 +61,7 @@ public class SQLTypeHandler implements TypeHandler<SQLDatabase> {
 
     @Override
     public Set<DatabaseType> getDatabaseTypes() {
-        return Set.of(DefaultTypes.SQL);
+        return Set.of(DefaultTypes.H2, DefaultTypes.MYSQL, DefaultTypes.POSTGRES, DefaultTypes.SQLITE);
     }
 
     @Override
