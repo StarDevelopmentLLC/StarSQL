@@ -1,5 +1,6 @@
 package com.stardevllc.starsql.common;
 
+import com.stardevllc.starlib.observable.Observable;
 import com.stardevllc.starsql.api.annotations.*;
 import com.stardevllc.starsql.api.interfaces.model.ClassModel;
 import com.stardevllc.starsql.api.interfaces.model.FieldModel;
@@ -8,7 +9,6 @@ import com.stardevllc.starsql.api.interfaces.model.Column;
 import com.stardevllc.starsql.api.interfaces.model.SQLDatabase;
 import com.stardevllc.starsql.api.interfaces.model.Table;
 import com.stardevllc.starsql.api.model.ForeignKeyStorageInfo;
-import com.stardevllc.starlib.observable.ObservableValue;
 import com.stardevllc.starlib.reflection.ReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -77,7 +77,7 @@ public class SQLTable implements Table {
             }
 
             Class<?> type = field.getType();
-            if (ObservableValue.class.isAssignableFrom(type) && !field.isAnnotationPresent(Codec.class)) {
+            if (Observable.class.isAssignableFrom(type) && !field.isAnnotationPresent(Codec.class)) {
                 continue;
             }
 

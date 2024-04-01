@@ -3,4 +3,4 @@ plugins {
 }
 
 rootProject.name = 'StarSQL'
-include 'api', 'common', 'mysql', 'postgres', 'sqlite', 'h2'
+include 'api', 'common', 'mysql'

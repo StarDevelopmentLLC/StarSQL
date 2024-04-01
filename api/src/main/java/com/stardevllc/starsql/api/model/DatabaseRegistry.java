@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public abstract class DatabaseRegistry<D extends Database> extends StringRegistry<D> {
     protected final Logger logger;
     public DatabaseRegistry(Logger logger, Map<String, D> initialObjects) {
-        super(initialObjects, key -> key.toLowerCase().replace(" ", "_"));
+        super(initialObjects, key -> key.toLowerCase().replace(" ", "_"), null);
         this.logger = logger;
     }
 
