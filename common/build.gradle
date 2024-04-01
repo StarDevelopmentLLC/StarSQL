@@ -5,6 +5,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         url = 'https://www.jitpack.io'
@@ -20,13 +21,13 @@ publishing {
 }
 
 group 'com.stardevllc.starsql'
-version '1.0.0-alpha.4'
+version '1.0.0-alpha.5'
 
 shadowJar {
     archiveBaseName.set("StarSQL-Common")
     archiveClassifier.set("")
     dependencies {
-          exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.3'))
+          exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.4'))
     } 
     //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
@@ -36,7 +37,7 @@ publishToMavenLocal.dependsOn(shadowJar)
 
 dependencies {
     api project(':api')
-    api 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.3'
+    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.4'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
