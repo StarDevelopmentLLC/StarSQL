@@ -15,6 +15,8 @@ repositories {
 publishing {
     publications {
         shadow(MavenPublication) { publication ->
+            groupId = 'com.github.StarDevelopmentLLC'
+            
             project.shadow.component(publication)
         }
     }
@@ -23,19 +25,23 @@ publishing {
 group 'com.stardevllc.starsql'
 version '1.0.0-alpha.5'
 
-dependencies {
-    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.4'
-}
-
 shadowJar {
-    archiveBaseName.set("StarSQL-API")
-    archiveClassifier.set("")
+    exclude('com.google.protobuf')
     dependencies {
         exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.4'))
     }
+    archiveClassifier.set("")
     //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 jar.finalizedBy(shadowJar)
 publishToMavenLocal.dependsOn(shadowJar)
+
+dependencies {
+    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.4'
+    api('com.mysql:mysql-connector-j:8.1.0') {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    }
+}
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

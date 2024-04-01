@@ -1,7 +1,6 @@
 package com.stardevllc.starsql.api.interfaces.model;
 
 import com.stardevllc.starsql.api.model.DatabaseRegistry;
-import com.stardevllc.starsql.api.statements.WhereClause;
 
 import java.util.List;
 import java.util.logging.Logger;
