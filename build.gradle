@@ -38,10 +38,11 @@ jar.finalizedBy(shadowJar)
 publishToMavenLocal.dependsOn(shadowJar)
 
 dependencies {
-    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.5'
+    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.8'
     api('com.mysql:mysql-connector-j:8.1.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+tasks.compileJava.dependsOn(clean)
