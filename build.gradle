@@ -23,12 +23,12 @@ publishing {
 }
 
 group 'com.stardevllc.starsql'
-version '1.0.0-alpha.7'
+version '1.0.0-alpha.8'
 
 shadowJar {
     exclude('com.google.protobuf')
     dependencies {
-        exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.9'))
+        exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.10'))
     }
     archiveClassifier.set("")
     //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
@@ -38,7 +38,7 @@ jar.finalizedBy(shadowJar)
 publishToMavenLocal.dependsOn(shadowJar)
 
 dependencies {
-    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.9'
+    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.10'
     api('com.mysql:mysql-connector-j:8.1.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }
