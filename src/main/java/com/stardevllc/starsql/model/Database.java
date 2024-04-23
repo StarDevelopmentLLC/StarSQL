@@ -2,7 +2,7 @@ package com.stardevllc.starsql.model;
 
 import com.stardevllc.starlib.reflection.ReflectionHelper;
 import com.stardevllc.starsql.StarSQL;
-import com.stardevllc.starsql.interfaces.TypeHandler;
+import com.stardevllc.starsql.interfaces.ObjectConverter;
 import com.stardevllc.starsql.statements.JoinType;
 import com.stardevllc.starsql.statements.SqlSelect;
 import com.stardevllc.starsql.statements.WhereClause;
@@ -19,7 +19,7 @@ public class Database {
     protected Logger logger;
     protected String url, name, user, password;
     protected Set<Table> tables = new LinkedHashSet<>();
-    protected Set<TypeHandler> typeHandlers = new HashSet<>();
+    protected Set<ObjectConverter> typeHandlers = new HashSet<>();
     protected DatabaseRegistry registry;
 
     protected final LinkedList<Object> queue = new LinkedList<>();
@@ -354,7 +354,7 @@ public class Database {
                 }
 
                 if (column.getTypeHandler() != null) {
-                    value = column.getTypeHandler().getSerializer().serialize(column, value);
+                    value = column.getTypeHandler().serializeToSQL(column, value);
                 }
 
                 if (column.hasForeignKey()) {
@@ -709,8 +709,8 @@ public class Database {
         return Objects.hash(name);
     }
 
-    public Set<TypeHandler> getTypeHandlers() {
-        Set<TypeHandler> typeHandlers = new HashSet<>(this.typeHandlers);
+    public Set<ObjectConverter> getTypeHandlers() {
+        Set<ObjectConverter> typeHandlers = new HashSet<>(this.typeHandlers);
         typeHandlers.addAll(StarSQL.DEFAULT_TYPE_HANDLERS);
         if (registry != null) {
             typeHandlers.addAll(registry.getTypeHandlers());
@@ -718,7 +718,7 @@ public class Database {
         return typeHandlers;
     }
 
-    public void addTypeHandler(TypeHandler handler) {
+    public void addTypeHandler(ObjectConverter handler) {
         this.typeHandlers.add(handler);
     }
 

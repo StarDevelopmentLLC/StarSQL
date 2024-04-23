@@ -30,7 +30,7 @@ public class Row {
                 } else if (column.getCodec() != null) {
                     data.put(columnLabel, column.getCodec().decode(rs.getString(i)));
                 } else if (column.getTypeHandler() != null) {
-                    Object object = column.getTypeHandler().getDeserializer().deserialize(column, rs.getObject(i));
+                    Object object = column.getTypeHandler().deserializeFromSQL(column, rs.getObject(i));
                     this.data.put(columnLabel, object);
                 } else {
                     this.data.put(columnLabel, rs.getObject(i));

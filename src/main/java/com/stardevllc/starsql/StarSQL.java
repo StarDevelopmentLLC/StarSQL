@@ -1,6 +1,6 @@
 package com.stardevllc.starsql;
 
-import com.stardevllc.starsql.interfaces.TypeHandler;
+import com.stardevllc.starsql.interfaces.ObjectConverter;
 import com.stardevllc.starsql.model.DatabaseRegistry;
 import com.stardevllc.starsql.typehandlers.impl.*;
 
@@ -16,7 +16,7 @@ import java.util.logging.StreamHandler;
 public final class StarSQL {
     private static Logger logger = createLogger();
 
-    public static final Set<TypeHandler> DEFAULT_TYPE_HANDLERS = Set.of(new BooleanHandler(), new DoubleHandler(), new EnumHandler(), new FloatHandler(), new IntegerHandler(), new LongHandler(), new StringHandler(), new UUIDHander(), new ValueHandler());
+    public static final Set<ObjectConverter> DEFAULT_TYPE_HANDLERS = Set.of(new BooleanConverter(), new DoubleConverter(), new EnumConverter(), new FloatConverter(), new IntegerConverter(), new LongConverter(), new StringConverter(), new UUIDConverter(), new ValueConverter());
 
     public static DatabaseRegistry createDatabaseRegistry() {
         return new DatabaseRegistry(logger);

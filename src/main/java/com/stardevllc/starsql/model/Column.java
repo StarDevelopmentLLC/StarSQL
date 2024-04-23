@@ -2,7 +2,7 @@ package com.stardevllc.starsql.model;
 
 import com.stardevllc.starsql.annotations.*;
 import com.stardevllc.starsql.interfaces.ObjectCodec;
-import com.stardevllc.starsql.interfaces.TypeHandler;
+import com.stardevllc.starsql.interfaces.ObjectConverter;
 import com.stardevllc.starsql.statements.SqlColumnKey;
 
 import java.lang.reflect.Field;
@@ -23,7 +23,7 @@ public class Column implements Comparable<Column> {
     private final boolean primaryKey, autoIncrement, notNull, unique;
     private final int order;
     private ObjectCodec<?> codec;
-    private TypeHandler typeHandler;
+    private ObjectConverter typeHandler;
     
     private List<ForeignKeyStorageInfo> foreignKeyStorageInfos = new ArrayList<>();
     
@@ -67,7 +67,7 @@ public class Column implements Comparable<Column> {
         }
         
         if (typeHandler == null && codec == null) {
-            for (TypeHandler typeHandler : this.table.getDatabase().getTypeHandlers()) {
+            for (ObjectConverter typeHandler : this.table.getDatabase().getTypeHandlers()) {
                 if (typeHandler.matches(this.field.getType())) {
                     this.typeHandler = typeHandler;
                     break;
@@ -196,7 +196,7 @@ public class Column implements Comparable<Column> {
         return order;
     }
 
-    public TypeHandler getTypeHandler() {
+    public ObjectConverter getTypeHandler() {
         return typeHandler;
     }
 

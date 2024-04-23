@@ -1,11 +1,11 @@
 package com.stardevllc.starsql.typehandlers.impl;
 
 import com.stardevllc.starsql.model.Column;
-import com.stardevllc.starsql.typehandlers.SQLTypeHandler;
+import com.stardevllc.starsql.typehandlers.SQLConverter;
 
-public class StringHandler extends SQLTypeHandler {
-    public StringHandler() {
-        super(String.class, "varchar(1000)", StringHandler::parse, StringHandler::parse);
+public class StringConverter extends SQLConverter {
+    public StringConverter() {
+        super(String.class, "varchar(1000)");
         addAdditionalClass(Character.class, char.class);
     }
     
@@ -18,5 +18,15 @@ public class StringHandler extends SQLTypeHandler {
             return object.toString();
         }
         return "";
+    }
+
+    @Override
+    public Object serializeToSQL(Column column, Object input) {
+        return parse(column, input);
+    }
+
+    @Override
+    public Object deserializeFromSQL(Column column, Object input) {
+        return parse(column, input);
     }
 }

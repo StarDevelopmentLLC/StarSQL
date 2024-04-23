@@ -1,18 +1,13 @@
 package com.stardevllc.starsql.interfaces;
 
-import com.stardevllc.starlib.Value;
+import com.stardevllc.starsql.model.Column;
 
 import java.util.Set;
 
-/**
- * This interface defines the contract for how Java Types are converted into Database Types and Database Types to Java Types. <br>
- * By default, there will be support for Java Primitives and their wrapper classes, UUID, String and the {@link Value} class from StarLib for each database type. <br
- * TypeHandlers able to be made for multiple database types if desired.
- */
-public interface TypeHandler {
-    TypeSerializer getSerializer();
-
-    TypeDeserializer getDeserializer();
+public interface ObjectConverter<T> {
+    Object serializeToSQL(Column column, Object input);
+    
+    T deserializeFromSQL(Column column, Object input);
 
     void addAdditionalClass(Class<?>... classes);
 

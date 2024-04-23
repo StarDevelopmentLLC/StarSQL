@@ -1,37 +1,20 @@
 package com.stardevllc.starsql.typehandlers;
 
-import com.stardevllc.starsql.interfaces.TypeDeserializer;
-import com.stardevllc.starsql.interfaces.TypeHandler;
-import com.stardevllc.starsql.interfaces.TypeSerializer;
+import com.stardevllc.starsql.interfaces.ObjectConverter;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class SQLTypeHandler implements TypeHandler {
+public abstract class SQLConverter<T> implements ObjectConverter<T> {
     protected final Class<?> mainClass;
     protected final Set<Class<?>> additionalClasses = new HashSet<>();
     protected final String mysqlType;
     
-    protected final TypeSerializer serializer;
-    protected final TypeDeserializer deserializer;
-    
-    public SQLTypeHandler(Class<?> mainClass, String mysqlType, TypeSerializer serializer, TypeDeserializer deserializer) {
+    public SQLConverter(Class<?> mainClass, String mysqlType) {
         this.mainClass = mainClass;
         this.mysqlType = mysqlType;
-        this.serializer = serializer;
-        this.deserializer = deserializer;
-    }
-    
-    @Override
-    public TypeSerializer getSerializer() {
-        return serializer;
-    }
-    
-    @Override
-    public TypeDeserializer getDeserializer() {
-        return deserializer;
     }
     
     @Override
@@ -79,7 +62,7 @@ public class SQLTypeHandler implements TypeHandler {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SQLTypeHandler that = (SQLTypeHandler) o;
+        SQLConverter that = (SQLConverter) o;
         return Objects.equals(mainClass, that.mainClass) && Objects.equals(additionalClasses, that.additionalClasses);
     }
     

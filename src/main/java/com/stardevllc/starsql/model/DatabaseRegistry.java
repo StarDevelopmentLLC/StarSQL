@@ -1,7 +1,7 @@
 package com.stardevllc.starsql.model;
 
 import com.stardevllc.starlib.registry.StringRegistry;
-import com.stardevllc.starsql.interfaces.TypeHandler;
+import com.stardevllc.starsql.interfaces.ObjectConverter;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class DatabaseRegistry extends StringRegistry<Database> {
     protected Logger logger;
     private boolean setup;
-    private Set<TypeHandler> typeHandlers = new HashSet<>();
+    private Set<ObjectConverter> typeHandlers = new HashSet<>();
     
     public DatabaseRegistry(Logger logger) {
         this.logger = logger;
@@ -44,11 +44,11 @@ public class DatabaseRegistry extends StringRegistry<Database> {
         databases.forEach(this::register);
     }
 
-    public Set<TypeHandler> getTypeHandlers() {
+    public Set<ObjectConverter> getTypeHandlers() {
         return new HashSet<>(typeHandlers);
     }
     
-    public void addTypeHandler(TypeHandler handler) {
+    public void addTypeHandler(ObjectConverter handler) {
         this.typeHandlers.add(handler);
     }
 }
