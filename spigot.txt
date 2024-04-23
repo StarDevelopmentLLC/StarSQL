@@ -1,0 +1,135 @@
+[B][COLOR=#ff0000]Server Owners, this is not a plugin, it is a developer utility[/COLOR][/B]
+
+This is a library focused on converting Java Objects to MySQL Tables, Rows and Columns. This type of system is known as an ORM or Object-Relational Mapping
+
+[B]Dependencies[/B]
+Java 17
+MySQL JDBC Connection 8.1.0 (Shaded into the final Jar)
+[URL='https://www.spigotmc.org/resources/starlib.106562/']StarLib 1.0.0-alpha.14[/URL]
+
+If you are a plugin developer, I strongly encourage you to depend on [URL='https://www.spigotmc.org/resources/starcore.110550/']StarCore [/URL]as it provides this library already.
+
+[B]Version Information[/B]
+This library is very much a work in progress and very unstable. I am constantly adding, changing and removing things within this library. This is based on need in my other projects, of which are also works in progress and constantly changing and evolving. I expect things to stabilize as time goes on.
+
+[B]Installation[/B]
+I strongly encourage the use of a build tool like Gradle or Maven. You can find the details needed to fill in what you need in your build tool.
+[B]Repository[/B]: [URL='https://www.jitpack.io/']https://www.jitpack.io[/URL]
+[B]Group[/B]: com.github.StarDevelopmentLLC
+[B]Artifact[/B]: StarSQL
+[B]Version[/B]: 1.0.0-alpha.10
+
+[B]NOTE: This is not intended as a full ORM or a full replacement of using SQL, as such, the library provides the ability to directly execute SQL statements.
+Please be aware that it was created to make some tasks easier on my end, and I have slowly been adding onto the library.[/B]
+
+[SIZE=6][B]Usage[/B][/SIZE]
+In order to use this library, there are a few things that you need to have in order to get it to be functional. 
+
+[B]Database Server[/B]
+This library supports MySQL Only, there are plans to replace this library in the future and support more database and file types, however that is a long ways away. 
+MySQL is a free and open source database solution that is perfectly functional for most use cases. You can download it for free here [URL='https://dev.mysql.com/downloads/']MySQL Community Server[/URL]
+For platforms that use a package manager, that is also a viable option. 
+Some key information that you need from the database server when it is up and running, 
+- Hostname (If you are running locally, use "localhost" or "127.0.0.1"
+- Port (Default is 3306)
+- Username (This is set up when configuring the database)
+- Password (this is set up when configuring the database)
+
+[B]Getting a DatabaseRegistry[/B]
+The entry point to using the library is the "DatabaseRegistry" class. This is a StringRegistry from StarLib, so all of those methods and functions apply.
+
+You can obtain this in two ways, static factory in StarSQL class, or the constructor
+
+For the factory method, all you do is the following
+[code=Java]DatabaseRegistry databaseRegistry = StarSQL.createDatabaseRegistry();[/code]
+This will create a DatabaseRegistry with a default Logger implementation provided by the StarSQL class. 
+
+The way you would do it with the constructor is the following
+[code=Java]DatabaseRegistryy databaseRegistry = new DatabaseRegistry(logger);[/code]
+This is for using it with a plugin, or if you have your own Logger instance you would like to use. 
+
+[B]DBProperties[/B]
+The next thing you need to do is create a DBProperties instance, this is a builder class to allow you to chain together arguments without having to worry about constructors. 
+Just ensure that you have the correct information in this, otherwise you will get errors.
+[code=Java]DBProperties properties = new DBProperties().setDatabaseName("test").setHost("localhost").setPort(3306).setUsername("user").setPassword("password");[/code]
+StarSQL defaults to a host of "localhost" and a port of "3306". If these values are the same, you do not need to provide them. They are above just as an example.
+
+[B]Database[/B]
+The next step is to create a Database instance. All you have to do is pass in the logger and the properties.
+[code=Java]Database database = new Database(databaseRegistry.getLogger(), properties);[/code]
+Then you register the database to the registry
+[code=Java]databaseRegistry.register(database);[/code]
+
+[B]Registering Java Classes as a Table[/B]
+StarSQL operates on the fact that Java Classes are templates for a table. As such, and because Reflection is used, there are some default requirements that must be true for all table mapped classes. 
+
+Requirements
+- All classes must have a default no-args constructor. This can be public, protected, package-private and private. Reflection allows me to access these constructors. 
+- Tables must have a Primary Key (See General Notes for this)
+
+General Notes
+- Names are determined by the lower-case version of the class name, or by using the @Name annotation on the class itself. 
+- Primary Keys are determined by using the @PrimaryKey annotation, or by having a field that is either a long or an int that is named "id"
+
+Restrictions
+- Collections and maps are only supported via the ForeignKey system (More later)
+- The StarLib Observable types are skipped (for now)
+- Static and Final fields (Constants) are ignored
+- Transient Fields are ignored
+- You cannot map more than one table to a class. If you need this, you can register a child class, and still get all tables from a parent class
+
+You can then register the model class with 
+[code=Java]database.registerClass(Example.class);[/code]
+
+When you are done registering all of the tables you need, call the setup method in the database registry
+[code=Java]databaseRegistry.setup();[/code]
+Please note: If you register databases/tables after the setup method is called, it will set up the things it needs when the register method(s) are called. 
+It is recommended to do it in bulk as to keep things together and more efficient. 
+
+[B]Fields and Converters[/B]
+By default, StarSQL supports boolean, double, enums, float, int, long, String, UUID and the StarLib Value for field types, however it does provide a way to extend upon this system to add more. 
+You can do this by extending the SQLConverter class and then registering it to the database or the database registry BEFORE you register any classes that use that type. 
+[code=Java]databaseRegistry.addObjectConverter(converter);
+database.addObjectConverter(converter);[/code]
+You only need to register it to one of the two. 
+Registering it to the DatabaseRegistry means that all databases registered to that registry will use that converter. 
+Registering it to the database means that only that database will use that converter. 
+
+StarSQL uses the Converter system for all default supported types, this keeps things much simpler while also allowing extension. 
+
+[B]Saving data to a database[/B]
+You can save data to the database by calling any of the save() methods. 
+saveSilent(Object) will save the data, but silence any exceptions that get thrown. 
+save(Object) will save the data, but you need to handle the SQLException with a try-catch, or just pass it up the call stack. 
+Saving data to the database will auto-update auto-increment fields in the instance. 
+
+You can also bulk save using the queue(Object) and flush() methods.  
+
+[B]Deleting data from the database[/B]
+You can delete data from the database by using any of the delete() methods. 
+
+delete(Object) will delete the object using the Primary Key from the database. 
+delete(Class<?>, Object) will delete a row from the database using the table linked to the class and the primary key based on the Object parameter
+deleteSilent(Object) and deleteSilent(Class<?>, Object) are the same as their other counterparts, but they silence the SQL exceptions
+
+[B]Getting data from the database[/B]
+There are multiple ways to retrieve data from the database, each one has different use cases
+
+Note: All get methods return a List. This list should never be null, but it will be empty if nothing matches or exists for what you specify. 
+
+You can get all data from a table by using the following 
+[code=Java]List<Example> examples = database.get(Example.class);[/code]
+Just replace "Example" with the class that you want to get. 
+This will get literally all entries in the database matching that class registration. 
+
+You can use a simple filter based on a single column and a value for that colum. This must match with the sql "=" where condition
+[code=Java]List<Example> examples = database.get(Example.class, "id", 1);[/code]
+
+You can also specify an advanced filter using a WhereClause. This class is an extension of the SqlStatements api that I made to replace some direct sql statements with builder-style factories. 
+[code=Java]WhereClause clause = new WhereClause().addCondition("id", "=", 1);
+List<Example> examples = database.get(Example.class, clause);[/code]
+
+Note: All conditional get methods call this specific one. They just parse the parameters into a WhereClause. 
+You can in-line this last one with the clause itself as it is a builder class, for something like this, with a single field, just use the method, but if you want more conditions, take a look at the WhereClause class and it's sub-classes to see what you can do. 
+
+[I]This library is provided free of charge and under the MIT Open Source License. I will never sell this library anywhere. If you see it being sold, it is not by me and please report any of these cases to me directly. This library is only published as a GitHub Release and on SpigotMC, other sources are to be considered use at your own risk. [/I]
