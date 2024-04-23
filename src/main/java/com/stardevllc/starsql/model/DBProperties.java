@@ -1,8 +1,12 @@
 package com.stardevllc.starsql.model;
 
 public class DBProperties {
-    protected String databaseName, username, password, host;
-    protected int port;
+    protected String databaseName, username, password, host = "localhost";
+    protected int port = 3306;
+    
+    static {
+        DBProperties properties = new DBProperties().setDatabaseName("test").setHost("localhost").setPort(3306).setUsername("user").setPassword("password");
+    }
     
     public DBProperties setDatabaseName(String databaseName) {
         this.databaseName = databaseName;
