@@ -67,7 +67,7 @@ public class Column implements Comparable<Column> {
         }
         
         if (typeHandler == null && codec == null) {
-            for (ObjectConverter typeHandler : this.table.getDatabase().getTypeHandlers()) {
+            for (ObjectConverter typeHandler : this.table.getDatabase().getObjectConverters()) {
                 if (typeHandler.matches(this.field.getType())) {
                     this.typeHandler = typeHandler;
                     break;

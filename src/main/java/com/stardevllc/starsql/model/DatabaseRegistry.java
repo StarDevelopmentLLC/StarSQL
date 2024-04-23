@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class DatabaseRegistry extends StringRegistry<Database> {
     protected Logger logger;
     private boolean setup;
-    private Set<ObjectConverter> typeHandlers = new HashSet<>();
+    private Set<ObjectConverter> objectConverters = new HashSet<>();
     
     public DatabaseRegistry(Logger logger) {
         this.logger = logger;
@@ -44,11 +44,11 @@ public class DatabaseRegistry extends StringRegistry<Database> {
         databases.forEach(this::register);
     }
 
-    public Set<ObjectConverter> getTypeHandlers() {
-        return new HashSet<>(typeHandlers);
+    public Set<ObjectConverter> getObjectConverters() {
+        return new HashSet<>(objectConverters);
     }
     
-    public void addTypeHandler(ObjectConverter handler) {
-        this.typeHandlers.add(handler);
+    public void addObjectConverter(ObjectConverter converter) {
+        this.objectConverters.add(converter);
     }
 }

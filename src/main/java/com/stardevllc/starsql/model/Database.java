@@ -19,7 +19,7 @@ public class Database {
     protected Logger logger;
     protected String url, name, user, password;
     protected Set<Table> tables = new LinkedHashSet<>();
-    protected Set<ObjectConverter> typeHandlers = new HashSet<>();
+    protected Set<ObjectConverter> objectConverters = new HashSet<>();
     protected DatabaseRegistry registry;
 
     protected final LinkedList<Object> queue = new LinkedList<>();
@@ -709,17 +709,17 @@ public class Database {
         return Objects.hash(name);
     }
 
-    public Set<ObjectConverter> getTypeHandlers() {
-        Set<ObjectConverter> typeHandlers = new HashSet<>(this.typeHandlers);
+    public Set<ObjectConverter> getObjectConverters() {
+        Set<ObjectConverter> typeHandlers = new HashSet<>(this.objectConverters);
         typeHandlers.addAll(StarSQL.DEFAULT_TYPE_HANDLERS);
         if (registry != null) {
-            typeHandlers.addAll(registry.getTypeHandlers());
+            typeHandlers.addAll(registry.getObjectConverters());
         }
         return typeHandlers;
     }
 
-    public void addTypeHandler(ObjectConverter handler) {
-        this.typeHandlers.add(handler);
+    public void addObjectConverter(ObjectConverter handler) {
+        this.objectConverters.add(handler);
     }
 
     public void setRegistry(DatabaseRegistry registry) {
