@@ -21,13 +21,7 @@ public class Table {
     private List<Field> columnFields = new ArrayList<>();
     
     private List<Field> foreignKeyStorageFields = new ArrayList<>();
-
-    /**
-     * Constructs a new table based on a Java Class
-     *
-     * @param database   The Database that this table is registered to.
-     * @param modelClass The class to use
-     */
+    
     public Table(Database database, Class<?> modelClass) throws Exception {
         this.database = database;
         this.modelClass = modelClass;
