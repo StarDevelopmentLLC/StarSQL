@@ -21,19 +21,19 @@ publishing {
 }
 
 group 'com.github.StarDevelopmentLLC'
-version '1.0.0-alpha.10'
+version '1.0.0-alpha.11'
 
 shadowJar {
     exclude('com.google.protobuf')
     dependencies {
-        exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.14'))
+        exclude(dependency('com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.15'))
     }
     archiveClassifier.set("")
     //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 dependencies {
-    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.14'
+    implementation 'com.github.StarDevelopmentLLC:StarLib:1.0.0-alpha.15'
     api('com.mysql:mysql-connector-j:8.1.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }

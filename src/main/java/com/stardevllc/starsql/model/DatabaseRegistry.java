@@ -28,7 +28,7 @@ public class DatabaseRegistry extends StringRegistry<Database> {
         return setup;
     }
 
-    public void register(Database object) {
+    public Database register(Database object) {
         super.register(object.getName(), object);
         object.setRegistry(this);
         if (this.setup) {
@@ -38,6 +38,7 @@ public class DatabaseRegistry extends StringRegistry<Database> {
                 e.printStackTrace();
             }
         }
+        return object;
     }
 
     public void registerAll(Collection<Database> databases) {
