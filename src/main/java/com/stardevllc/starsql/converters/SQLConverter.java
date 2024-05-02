@@ -1,4 +1,4 @@
-package com.stardevllc.starsql.typehandlers;
+package com.stardevllc.starsql.converters;
 
 import com.stardevllc.starsql.interfaces.ObjectConverter;
 

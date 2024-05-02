@@ -1,7 +1,7 @@
-package com.stardevllc.starsql.typehandlers.impl;
+package com.stardevllc.starsql.converters.impl;
 
+import com.stardevllc.starsql.converters.SQLConverter;
 import com.stardevllc.starsql.model.Column;
-import com.stardevllc.starsql.typehandlers.SQLConverter;
 
 public class StringConverter extends SQLConverter {
     public StringConverter() {

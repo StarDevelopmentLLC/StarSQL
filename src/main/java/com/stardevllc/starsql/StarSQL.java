@@ -1,8 +1,8 @@
 package com.stardevllc.starsql;
 
+import com.stardevllc.starsql.converters.impl.*;
 import com.stardevllc.starsql.interfaces.ObjectConverter;
 import com.stardevllc.starsql.model.DatabaseRegistry;
-import com.stardevllc.starsql.typehandlers.impl.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
