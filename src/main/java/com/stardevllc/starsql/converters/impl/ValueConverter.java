@@ -1,8 +1,8 @@
 package com.stardevllc.starsql.converters.impl;
 
+import com.stardevllc.starlib.misc.Value;
 import com.stardevllc.starsql.model.Column;
 import com.stardevllc.starsql.converters.SQLConverter;
-import com.stardevllc.starlib.Value;
 
 import java.lang.reflect.Method;
 
