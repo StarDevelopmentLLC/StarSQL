@@ -73,7 +73,7 @@ General Notes
 
 Restrictions
 - Collections and maps are only supported via the ForeignKey system (More later)
-- The StarLib Observable types are skipped (for now)
+- The StarLib com.stardevllc.starlib.observable.Observable types are skipped (for now)
 - Static and Final fields (Constants) are ignored
 - Transient Fields are ignored
 - You cannot map more than one table to a class. If you need this, you can register a child class, and still get all tables from a parent class
