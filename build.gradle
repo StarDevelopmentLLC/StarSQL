@@ -26,11 +26,11 @@ version '1.0.0-alpha.13'
 shadowJar {
     exclude('com.google.protobuf')
     dependencies {
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:observable-base:1.0.0-alpha.20'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:reflection:1.0.0-alpha.20'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:registry:1.0.0-alpha.20'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:misc:1.0.0-alpha.20'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:helper:1.0.0-alpha.20'))
+        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:observable-base:1.0.0-alpha.21'))
+        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:reflection:1.0.0-alpha.21'))
+        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:registry:1.0.0-alpha.21'))
+        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:misc:1.0.0-alpha.21'))
+        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:helper:1.0.0-alpha.21'))
     }
     archiveClassifier.set("")
     //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
