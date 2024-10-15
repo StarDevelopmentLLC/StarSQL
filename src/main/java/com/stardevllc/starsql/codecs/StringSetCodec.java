@@ -1,6 +1,6 @@
 package com.stardevllc.starsql.codecs;
 
-import com.stardevllc.starlib.helper.StringHelper;
+import com.stardevllc.helper.StringHelper;
 import com.stardevllc.starsql.interfaces.ObjectCodec;
 
 import java.util.*;

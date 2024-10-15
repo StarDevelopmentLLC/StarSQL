@@ -1,6 +1,6 @@
 package com.stardevllc.starsql.model;
 
-import com.stardevllc.starlib.reflection.ReflectionHelper;
+import com.stardevllc.helper.ReflectionHelper;
 import com.stardevllc.starsql.StarSQL;
 import com.stardevllc.starsql.interfaces.ObjectConverter;
 import com.stardevllc.starsql.statements.JoinType;

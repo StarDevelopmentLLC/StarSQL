@@ -1,7 +1,7 @@
 package com.stardevllc.starsql.model;
 
-import com.stardevllc.starlib.observable.Observable;
-import com.stardevllc.starlib.reflection.ReflectionHelper;
+import com.stardevllc.helper.ReflectionHelper;
+import com.stardevllc.observable.Observable;
 import com.stardevllc.starsql.annotations.*;
 
 import java.lang.reflect.Field;

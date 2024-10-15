@@ -1,6 +1,6 @@
 package com.stardevllc.starsql.model;
 
-import com.stardevllc.starlib.registry.StringRegistry;
+import com.stardevllc.registry.StringRegistry;
 import com.stardevllc.starsql.interfaces.ObjectConverter;
 
 import java.util.Collection;

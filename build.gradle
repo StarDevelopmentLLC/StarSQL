@@ -26,22 +26,18 @@ version '1.0.0-alpha.14'
 shadowJar {
     exclude('com.google.protobuf')
     dependencies {
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:observable-base:1.0.0-alpha.23'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:reflection:1.0.0-alpha.23'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:registry:1.0.0-alpha.23'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:misc:1.0.0-alpha.23'))
-        exclude(dependency('com.github.StarDevelopmentLLC.StarLib:helper:1.0.0-alpha.23'))
+        exclude(dependency('com.github.StarDevelopmentLLC:observable:0.1.0'))
+        exclude(dependency('com.github.StarDevelopmentLLC:registry:0.1.0'))
+        exclude(dependency('com.github.StarDevelopmentLLC:helper:0.1.0'))
     }
     archiveClassifier.set("")
     //destinationDirectory = file("${project.rootDir}" + File.separator + "build")
 }
 
 dependencies {
-    implementation 'com.github.StarDevelopmentLLC.StarLib:observable-base:1.0.0-alpha.23'
-    implementation 'com.github.StarDevelopmentLLC.StarLib:reflection:1.0.0-alpha.23'
-    implementation 'com.github.StarDevelopmentLLC.StarLib:registry:1.0.0-alpha.23'
-    implementation 'com.github.StarDevelopmentLLC.StarLib:misc:1.0.0-alpha.23'
-    implementation 'com.github.StarDevelopmentLLC.StarLib:helper:1.0.0-alpha.23'
+    implementation 'com.github.StarDevelopmentLLC:observable:0.1.0'
+    implementation 'com.github.StarDevelopmentLLC:registry:0.1.0'
+    implementation 'com.github.StarDevelopmentLLC:helper:0.1.0'
     api('com.mysql:mysql-connector-j:8.1.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }

@@ -16,7 +16,7 @@ import java.util.logging.StreamHandler;
 public final class StarSQL {
     private static Logger logger = createLogger();
 
-    public static final Set<ObjectConverter> DEFAULT_TYPE_HANDLERS = Set.of(new BooleanConverter(), new DoubleConverter(), new EnumConverter(), new FloatConverter(), new IntegerConverter(), new LongConverter(), new StringConverter(), new UUIDConverter(), new ValueConverter());
+    public static final Set<ObjectConverter> DEFAULT_TYPE_HANDLERS = Set.of(new BooleanConverter(), new DoubleConverter(), new EnumConverter(), new FloatConverter(), new IntegerConverter(), new LongConverter(), new StringConverter(), new UUIDConverter());
 
     public static DatabaseRegistry createDatabaseRegistry() {
         return new DatabaseRegistry(logger);
