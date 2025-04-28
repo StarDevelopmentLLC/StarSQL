@@ -1,9 +1,9 @@
-package com.stardevllc.starsql.statements;
+package com.stardevllc.starsql.clause;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderByClause {
+public class OrderByClause implements SqlClause {
     public enum Type {
         ASC, DESC
     }

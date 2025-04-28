@@ -1,11 +1,12 @@
-package com.stardevllc.starsql.statements;
+package com.stardevllc.starsql.clause;
 
 import com.stardevllc.starsql.model.Column;
+import com.stardevllc.starsql.statements.SqlColumnKey;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class WhereClause {
+public class WhereClause implements SqlClause {
     private List<SqlColumnKey> columns = new LinkedList<>();
     private List<String> conditions = new LinkedList<>();
     private List<Object> values = new LinkedList<>();

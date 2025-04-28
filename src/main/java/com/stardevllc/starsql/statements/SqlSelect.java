@@ -1,5 +1,6 @@
 package com.stardevllc.starsql.statements;
 
+import com.stardevllc.starsql.clause.*;
 import com.stardevllc.starsql.model.Column;
 import com.stardevllc.starsql.model.Table;
 

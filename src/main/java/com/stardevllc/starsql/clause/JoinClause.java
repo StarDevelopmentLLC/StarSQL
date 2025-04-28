@@ -1,6 +1,8 @@
-package com.stardevllc.starsql.statements;
+package com.stardevllc.starsql.clause;
 
-public class JoinClause {
+import com.stardevllc.starsql.statements.SqlColumnKey;
+
+public class JoinClause implements SqlClause {
     private JoinType joinType;
     private String table1Name, table2Name;
     private SqlColumnKey table1Column, table2Column;

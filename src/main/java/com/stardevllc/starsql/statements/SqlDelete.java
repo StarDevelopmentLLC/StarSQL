@@ -1,5 +1,6 @@
 package com.stardevllc.starsql.statements;
 
+import com.stardevllc.starsql.clause.WhereClause;
 import com.stardevllc.starsql.model.Table;
 
 import java.util.function.Consumer;
