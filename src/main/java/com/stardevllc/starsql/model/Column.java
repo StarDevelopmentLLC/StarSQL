@@ -5,15 +5,25 @@ import com.stardevllc.starsql.statements.SqlColumnKey;
 import java.util.Objects;
 
 public class Column{
-    private final Table table;
-
-    private final String name;
-    private String type;
-    private boolean primaryKey, autoIncrement, notNull, unique;
+    private Table table;
+    private String name;
     
-    public Column(Table table, String name) {
+    private String type;
+    private int size;
+    private int position;
+    private boolean nullable;
+    private boolean autoIncrement;
+    private boolean primaryKey;
+    
+    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey) {
         this.table = table;
         this.name = name;
+        this.type = type;
+        this.size = size;
+        this.position = position;
+        this.nullable = nullable;
+        this.autoIncrement = autoIncrement;
+        this.primaryKey = primaryKey;
     }
 
     public SqlColumnKey toKey() {
@@ -31,31 +41,31 @@ public class Column{
     public String getName() {
         return name;
     }
-
-    public Table getParent() {
-        return null;
-    }
-
+    
     public String getType() {
         return type;
     }
-
-    public boolean isUnique() {
-        return unique;
+    
+    public int getSize() {
+        return size;
     }
-
+    
+    public int getPosition() {
+        return position;
+    }
+    
+    public boolean isNullable() {
+        return nullable;
+    }
+    
     public boolean isPrimaryKey() {
         return primaryKey;
     }
-
+    
     public boolean isAutoIncrement() {
         return autoIncrement;
     }
-
-    public boolean isNotNull() {
-        return notNull;
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {

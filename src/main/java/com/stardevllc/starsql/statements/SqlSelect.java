@@ -41,7 +41,7 @@ public class SqlSelect implements SqlStatement {
         }
         this.tableName = table.getName();
         if (allColumns) {
-            table.getColumns().forEach(column -> columns.add(new SqlColumnKey(this.tableName, column.getName(), null)));
+            table.getColumns().forEach((name, column) -> columns.add(new SqlColumnKey(this.tableName, column.getName(), null)));
         }
     }
     

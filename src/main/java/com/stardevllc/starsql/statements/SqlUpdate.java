@@ -25,7 +25,7 @@ public class SqlUpdate implements SqlStatement {
     public SqlUpdate(Table table, boolean allColumns) {
         this(table.getName());
         if (allColumns) {
-            for (Column column : table.getColumns()) {
+            for (Column column : table.getColumns().values()) {
                 if (!column.isPrimaryKey()) {
                     this.columns.add(column.toKey());
                 }

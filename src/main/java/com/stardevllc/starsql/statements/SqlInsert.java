@@ -15,11 +15,15 @@ public class SqlInsert implements SqlStatement {
     public SqlInsert(String tableName) {
         this.tableName = tableName;
     }
+    
+    public SqlInsert(Table table) {
+        this.tableName = table.getName();
+    }
 
     public SqlInsert(Table table, boolean allColumns) {
         this(table.getName());
         if (allColumns) {
-            for (Column column : table.getColumns()) {
+            for (Column column : table.getColumns().values()) {
                 columns.add(new SqlColumnKey(this.tableName, column.getName(), null));
             }
         }
@@ -48,6 +52,15 @@ public class SqlInsert implements SqlStatement {
             rows.add(new LinkedList<>(List.of(values)));
         }
 
+        return this;
+    }
+    
+    public SqlInsert add(SqlColumnKey columnKey, Object... values) {
+        this.columns.add(columnKey);
+        if (values != null) {
+            rows.add(new LinkedList<>(List.of(values)));
+        }
+        
         return this;
     }
 

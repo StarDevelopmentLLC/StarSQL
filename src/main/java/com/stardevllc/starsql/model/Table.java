@@ -3,37 +3,47 @@ package com.stardevllc.starsql.model;
 import java.util.*;
 
 public class Table {
+    private String database;
     private String name;
-    private final Set<Column> columns = new TreeSet<>();
-    private Column primaryKeyColumn;
-    private int columnOrderIndex = 1000;
+    private Map<String, Column> columns = new HashMap<>();
 
-    public Table(String name) {
+    public Table(String database, String name, Map<String, Column> columns) {
+        this.database = database;
+        this.name = name;
+        this.columns.putAll(columns);
+    }
+    
+    public Table(SQLDatabase database, String name, Map<String, Column> columns) {
+        this(database.getName(), name, columns);
+    }
+    
+    public Table(String database, String name) {
+        this.database = database;
         this.name = name;
     }
-
-    public Column getPrimaryField() {
-        return primaryKeyColumn;
-    }
-
-    public Column getPrimaryKeyColumn() {
-        return primaryKeyColumn;
-    }
-
-    public int getColumnOrderIndex() {
-        return columnOrderIndex;
-    }
-
-    public void setColumnOrderIndex(int columnOrderIndex) {
-        this.columnOrderIndex = columnOrderIndex;
+    
+    public Table(SQLDatabase database, String name) {
+        this(database.getName(), name);
     }
 
     public String getName() {
         return name;
     }
-
-    public Set<Column> getColumns() {
-        return new TreeSet<>(columns);
+    
+    public String getDatabase() {
+        return database;
+    }
+    
+    public String getFullyQualifiedName() {
+        return "`" + database + "`.`" + name + "`";
+    }
+    
+    public Map<String, Column> getColumns() {
+        return new HashMap<>(columns);
+    }
+    
+    public void addColumn(Column column) {
+        this.columns.put(column.getName().toLowerCase(), column);
     }
 
     @Override
@@ -58,11 +68,6 @@ public class Table {
     }
 
     public Column getColumn(String columnName) {
-        for (Column column : this.columns) {
-            if (column.getName().equalsIgnoreCase(columnName)) {
-                return column;
-            }
-        }
-        return null;
+        return this.columns.get(columnName.toLowerCase());
     }
 }

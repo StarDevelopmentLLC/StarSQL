@@ -11,6 +11,10 @@ public class SqlInsertUpdate extends SqlInsert {
     public SqlInsertUpdate(String tableName) {
         super(tableName);
     }
+    
+    public SqlInsertUpdate(Table table) {
+        super(table);
+    }
 
     public SqlInsertUpdate(Table table, boolean allColumns) {
         super(table, allColumns);
@@ -64,7 +68,7 @@ public class SqlInsertUpdate extends SqlInsert {
         }
 
         this.columns.remove(primaryIndex);
-        List<Object> row = this.rows.get(0);
+        List<Object> row = this.rows.getFirst();
         row.remove(primaryIndex);
 
         for (int i = 0; i < this.columns.size(); i++) {
