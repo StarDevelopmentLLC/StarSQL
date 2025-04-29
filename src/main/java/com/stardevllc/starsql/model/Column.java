@@ -14,8 +14,9 @@ public class Column{
     private boolean nullable;
     private boolean autoIncrement;
     private boolean primaryKey;
+    private boolean unique;
     
-    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey) {
+    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey, boolean unique) {
         this.table = table;
         this.name = name;
         this.type = type;
@@ -24,6 +25,7 @@ public class Column{
         this.nullable = nullable;
         this.autoIncrement = autoIncrement;
         this.primaryKey = primaryKey;
+        this.unique = unique;
     }
 
     public SqlColumnKey toKey() {
@@ -64,6 +66,10 @@ public class Column{
     
     public boolean isAutoIncrement() {
         return autoIncrement;
+    }
+    
+    public boolean isUnique() {
+        return unique;
     }
     
     @Override

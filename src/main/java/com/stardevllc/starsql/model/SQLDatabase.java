@@ -61,6 +61,25 @@ public class SQLDatabase {
                 e.printStackTrace();
             }
             
+            Map<String, Set<String>> uniqueKeys = new HashMap<>();
+            
+            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `CONSTRAINT_NAME` FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE `TABLE_SCHEMA`='?' AND `CONSTRAINT_TYPE`='UNIQUE';")) {
+                statement.setString(1, this.name);
+                
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String table = resultSet.getString("TABLE_NAME");
+                        String constraintName = resultSet.getString("CONSTRAINT_NAME"); //This is the name of the column if it is a unique constraint
+                        
+                        if (uniqueKeys.containsKey(table)) {
+                            uniqueKeys.get(table).add(constraintName);
+                        } else {
+                            uniqueKeys.put(table, new HashSet<>(Set.of(constraintName)));
+                        }
+                    }
+                }
+            }
+            
             for (String tableName : tableNames) {
                 Table table = new Table(this, tableName.toLowerCase());
                 
@@ -74,6 +93,8 @@ public class SQLDatabase {
                     e.printStackTrace();
                 }
                 
+                Set<String> uniqueColumns = uniqueKeys.getOrDefault(tableName, new HashSet<>());
+                
                 try (ResultSet columnResults = databaseMeta.getColumns(null, null, tableName, null)) {
                     while (columnResults.next()) {
                         String name = columnResults.getString("COLUMN_NAME");
@@ -85,8 +106,9 @@ public class SQLDatabase {
                         String isAutoIncrement = columnResults.getString("IS_AUTOINCREMENT");
                         boolean autoIncrement = isAutoIncrement != null && isAutoIncrement.equals("YES");
                         boolean primaryKey = primaryKeyColumn != null && primaryKeyColumn.equals(name);
+                        boolean unique = primaryKey || uniqueColumns.contains(name);
                         
-                        Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey);
+                        Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey, unique);
                         table.addColumn(column);
                     }
                 } catch (SQLException e) {
