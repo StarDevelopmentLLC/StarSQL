@@ -53,7 +53,7 @@ public class SQLDatabase {
             
             Set<String> tableNames = new HashSet<>();
             
-            try (ResultSet tableResults = databaseMeta.getTables(null, null, null, new String[]{"TABLE"})) {
+            try (ResultSet tableResults = databaseMeta.getTables(this.name, null, null, new String[]{"TABLE"})) {
                 while (tableResults.next()) {
                     tableNames.add(tableResults.getString("TABLE_NAME"));
                 }
@@ -63,7 +63,7 @@ public class SQLDatabase {
             
             Map<String, Set<String>> uniqueKeys = new HashMap<>();
             
-            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `CONSTRAINT_NAME` FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE `TABLE_SCHEMA`='?' AND `CONSTRAINT_TYPE`='UNIQUE';")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `CONSTRAINT_NAME` FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE `TABLE_SCHEMA`=? AND `CONSTRAINT_TYPE`='UNIQUE';")) {
                 statement.setString(1, this.name);
                 
                 try (ResultSet resultSet = statement.executeQuery()) {
@@ -98,7 +98,7 @@ public class SQLDatabase {
                 try (ResultSet columnResults = databaseMeta.getColumns(null, null, tableName, null)) {
                     while (columnResults.next()) {
                         String name = columnResults.getString("COLUMN_NAME");
-                        String type = TYPES_MAP.get(columnResults.getInt("COLUMN_TYPE"));
+                        String type = TYPES_MAP.get(columnResults.getInt("DATA_TYPE"));
                         int size = columnResults.getInt("COLUMN_SIZE");
                         int position = columnResults.getInt("ORDINAL_POSITION");
                         String isNullable = columnResults.getString("IS_NULLABLE");
