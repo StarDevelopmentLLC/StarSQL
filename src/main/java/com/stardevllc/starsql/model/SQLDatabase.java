@@ -3,6 +3,7 @@ package com.stardevllc.starsql.model;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class SQLDatabase {
     
@@ -120,6 +121,38 @@ public class SQLDatabase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public boolean execute(String sql) {
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            return statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error with statement: " + sql);
+        }
+        
+        return false;
+    }
+    
+    public void executeQuery(String sql, Consumer<ResultSet> consumer) {
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(sql);
+            consumer.accept(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error with statement: " + sql);
+        }
+    }
+    
+    public int executeUpdate(String sql) {
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            return statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error with statement: " + sql);
+        }
+        
+        return Integer.MIN_VALUE;
     }
     
     public String getName() {
