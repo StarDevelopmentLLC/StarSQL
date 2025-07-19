@@ -13,7 +13,7 @@ public class Table {
         this.columns.putAll(columns);
     }
     
-    public Table(SQLDatabase database, String name, Map<String, Column> columns) {
+    public Table(Database database, String name, Map<String, Column> columns) {
         this(database.getName(), name, columns);
     }
     
@@ -22,7 +22,7 @@ public class Table {
         this.name = name;
     }
     
-    public Table(SQLDatabase database, String name) {
+    public Table(Database database, String name) {
         this(database.getName(), name);
     }
 

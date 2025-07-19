@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class SQLDatabase {
+public class Database {
     
     private static final Map<Integer, String> TYPES_MAP = new HashMap<>();
     
@@ -33,7 +33,7 @@ public class SQLDatabase {
     
     private Map<String, Table> tables = new HashMap<>();
     
-    public SQLDatabase(String name, String url, String username, String password) {
+    public Database(String name, String url, String username, String password) {
         this.name = name;
         this.url = url;
         this.username = username;
@@ -103,10 +103,10 @@ public class SQLDatabase {
                         int size = columnResults.getInt("COLUMN_SIZE");
                         int position = columnResults.getInt("ORDINAL_POSITION");
                         String isNullable = columnResults.getString("IS_NULLABLE");
-                        boolean nullable = isNullable != null && isNullable.equals("YES");
+                        boolean nullable = Objects.equals(isNullable, "YES");
                         String isAutoIncrement = columnResults.getString("IS_AUTOINCREMENT");
-                        boolean autoIncrement = isAutoIncrement != null && isAutoIncrement.equals("YES");
-                        boolean primaryKey = primaryKeyColumn != null && primaryKeyColumn.equals(name);
+                        boolean autoIncrement = Objects.equals(isAutoIncrement, "YES");
+                        boolean primaryKey = Objects.equals(primaryKeyColumn, name);
                         boolean unique = primaryKey || uniqueColumns.contains(name);
                         
                         Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey, unique);
@@ -169,6 +169,15 @@ public class SQLDatabase {
     
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(this.url, this.username, this.password);
+    }
+    
+    public void connect(Consumer<Connection> connectionConsumer) {
+        try (Connection connection = connect()) {
+            connectionConsumer.accept(connection);
+        } catch (SQLException e) {
+            System.err.println("Problem with getting connection");
+            e.printStackTrace();
+        }
     }
     
     public String getUrl() {
