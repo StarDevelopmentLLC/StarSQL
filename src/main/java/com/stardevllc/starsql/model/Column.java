@@ -1,10 +1,10 @@
 package com.stardevllc.starsql.model;
 
-import com.stardevllc.starsql.statements.SqlColumnKey;
+import com.stardevllc.starsql.statements.ColumnKey;
 
 import java.util.Objects;
 
-public class Column{
+public class Column {
     private Table table;
     private String name;
     
@@ -16,7 +16,9 @@ public class Column{
     private boolean primaryKey;
     private boolean unique;
     
-    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey, boolean unique) {
+    private ColumnKey foreignKey;
+    
+    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey, boolean unique, ColumnKey foreignKey) {
         this.table = table;
         this.name = name;
         this.type = type;
@@ -26,16 +28,21 @@ public class Column{
         this.autoIncrement = autoIncrement;
         this.primaryKey = primaryKey;
         this.unique = unique;
+        this.foreignKey = foreignKey;
     }
 
-    public SqlColumnKey toKey() {
+    public ColumnKey toKey() {
         return toKey(null);
     }
 
-    public SqlColumnKey toKey(String alias) {
-        return new SqlColumnKey(this.table.getName(), this.name, alias);
+    public ColumnKey toKey(String alias) {
+        return new ColumnKey(this.table.getName(), this.name, alias);
     }
-
+    
+    public ColumnKey getForeignKey() {
+        return foreignKey;
+    }
+    
     public Table getTable() {
         return table;
     }

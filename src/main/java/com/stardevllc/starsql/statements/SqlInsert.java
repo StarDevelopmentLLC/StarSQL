@@ -9,7 +9,7 @@ import java.util.List;
 public class SqlInsert implements SqlStatement {
 
     protected final String tableName;
-    protected List<SqlColumnKey> columns = new LinkedList<>();
+    protected List<ColumnKey> columns = new LinkedList<>();
     protected List<List<Object>> rows = new LinkedList<>();
 
     public SqlInsert(String tableName) {
@@ -24,7 +24,7 @@ public class SqlInsert implements SqlStatement {
         this(table.getName());
         if (allColumns) {
             for (Column column : table.getColumns().values()) {
-                columns.add(new SqlColumnKey(this.tableName, column.getName(), null));
+                columns.add(new ColumnKey(this.tableName, column.getName(), null));
             }
         }
     }
@@ -32,14 +32,14 @@ public class SqlInsert implements SqlStatement {
     public SqlInsert columns(String... columns) {
         if (columns != null) {
             for (String column : columns) {
-                this.columns.add(new SqlColumnKey(this.tableName, column, null));
+                this.columns.add(new ColumnKey(this.tableName, column, null));
             }
         }
 
         return this;
     }
 
-    public SqlInsert columns(SqlColumnKey... columnKeys) {
+    public SqlInsert columns(ColumnKey... columnKeys) {
         if (columnKeys != null) {
             this.columns.addAll(List.of(columnKeys));
         }
@@ -55,7 +55,7 @@ public class SqlInsert implements SqlStatement {
         return this;
     }
     
-    public SqlInsert add(SqlColumnKey columnKey, Object... values) {
+    public SqlInsert add(ColumnKey columnKey, Object... values) {
         this.columns.add(columnKey);
         if (values != null) {
             rows.add(new LinkedList<>(List.of(values)));
@@ -74,7 +74,7 @@ public class SqlInsert implements SqlStatement {
         }
 
         StringBuilder sb = new StringBuilder("INSERT INTO ").append("`").append(tableName).append("` (");
-        for (SqlColumnKey column : columns) {
+        for (ColumnKey column : columns) {
             String tableName = column.getTableName() != null ? "`" + column.getTableName() + "`." : "";
             String columnName = column.getAlias() != null ? column.getAlias() : column.getColumnName();
 

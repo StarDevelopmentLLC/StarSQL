@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SqlInsertUpdate extends SqlInsert {
 
-    private SqlColumnKey primaryKeyColumn;
+    private ColumnKey primaryKeyColumn;
 
     public SqlInsertUpdate(String tableName) {
         super(tableName);
@@ -21,11 +21,11 @@ public class SqlInsertUpdate extends SqlInsert {
     }
 
     public SqlInsertUpdate primaryKeyColumn(String primaryKeyColumn) {
-        this.primaryKeyColumn = new SqlColumnKey(this.tableName, primaryKeyColumn, null);
+        this.primaryKeyColumn = new ColumnKey(this.tableName, primaryKeyColumn, null);
         return this;
     }
 
-    public SqlInsertUpdate primaryKeyColumn(SqlColumnKey columnKey) {
+    public SqlInsertUpdate primaryKeyColumn(ColumnKey columnKey) {
         this.primaryKeyColumn = columnKey;
         return this;
     }
@@ -36,7 +36,7 @@ public class SqlInsertUpdate extends SqlInsert {
     }
 
     @Override
-    public SqlInsertUpdate columns(SqlColumnKey... columnKeys) {
+    public SqlInsertUpdate columns(ColumnKey... columnKeys) {
         return (SqlInsertUpdate) super.columns(columnKeys);
     }
 
@@ -56,7 +56,7 @@ public class SqlInsertUpdate extends SqlInsert {
 
         int primaryIndex = -1;
         for (int i = 0; i < this.columns.size(); i++) {
-            SqlColumnKey sqlColumnKey = columns.get(i);
+            ColumnKey sqlColumnKey = columns.get(i);
             if (sqlColumnKey.equals(this.primaryKeyColumn)) {
                 primaryIndex = i;
                 break;
@@ -72,7 +72,7 @@ public class SqlInsertUpdate extends SqlInsert {
         row.remove(primaryIndex);
 
         for (int i = 0; i < this.columns.size(); i++) {
-            SqlColumnKey column = this.columns.get(i);
+            ColumnKey column = this.columns.get(i);
             Object object = row.get(i);
             sb.append("`").append(column.getColumnName()).append("`='").append(object).append("', ");
         }

@@ -4,28 +4,28 @@ import com.stardevllc.starsql.model.Column;
 
 import java.util.Objects;
 
-public class SqlColumnKey {
+public class ColumnKey {
     private final String tableName, columnName, alias;
 
-    public SqlColumnKey(String tableName, String columnName, String alias) {
+    public ColumnKey(String tableName, String columnName, String alias) {
         this.tableName = tableName;
         this.columnName = columnName;
         this.alias = alias;
     }
 
-    public SqlColumnKey(String columnName, String alias) {
+    public ColumnKey(String columnName, String alias) {
         this(null, columnName, alias);
     }
 
-    public SqlColumnKey(String columnName) {
+    public ColumnKey(String columnName) {
         this(columnName, null);
     }
     
-    public SqlColumnKey(Column column, String alias) {
+    public ColumnKey(Column column, String alias) {
         this(column.getTable().getName(), column.getName(), alias);
     }
     
-    public SqlColumnKey(Column column) {
+    public ColumnKey(Column column) {
         this(column, null);
     }
 
@@ -54,7 +54,7 @@ public class SqlColumnKey {
             return false;
         }
 
-        SqlColumnKey that = (SqlColumnKey) o;
+        ColumnKey that = (ColumnKey) o;
 
         if (!Objects.equals(tableName, that.tableName)) {
             return false;

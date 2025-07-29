@@ -1,26 +1,26 @@
 package com.stardevllc.starsql.clause;
 
 import com.stardevllc.starsql.model.Column;
-import com.stardevllc.starsql.statements.SqlColumnKey;
+import com.stardevllc.starsql.statements.ColumnKey;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class WhereClause implements SqlClause {
-    private List<SqlColumnKey> columns = new LinkedList<>();
+    private List<ColumnKey> columns = new LinkedList<>();
     private List<String> conditions = new LinkedList<>();
     private List<Object> values = new LinkedList<>();
     private List<WhereOperator> operators = new LinkedList<>();
 
     public WhereClause addCondition(String column, String condition, Object value) {
-        return addCondition(new SqlColumnKey(column), condition, value);
+        return addCondition(new ColumnKey(column), condition, value);
     }
 
     public WhereClause addCondition(WhereOperator operator, String column, String condition, Object value) {
-        return addCondition(operator, new SqlColumnKey(column), condition, value);
+        return addCondition(operator, new ColumnKey(column), condition, value);
     }
 
-    public WhereClause addCondition(WhereOperator operator, SqlColumnKey columnKey, String condition, Object value) {
+    public WhereClause addCondition(WhereOperator operator, ColumnKey columnKey, String condition, Object value) {
         this.columns.add(columnKey);
         this.conditions.add(condition);
         this.values.add(value);
@@ -28,7 +28,7 @@ public class WhereClause implements SqlClause {
         return this;
     }
     
-    public WhereClause addCondition(SqlColumnKey columnKey, String condition, Object value) {
+    public WhereClause addCondition(ColumnKey columnKey, String condition, Object value) {
         this.columns.add(columnKey);
         this.conditions.add(condition);
         this.values.add(value);
@@ -47,13 +47,13 @@ public class WhereClause implements SqlClause {
     public WhereClause columns(String... columns) {
         if (columns != null) {
             for (String column : columns) {
-                this.columns.add(new SqlColumnKey(column));
+                this.columns.add(new ColumnKey(column));
             }
         }
         return this;
     }
     
-    public WhereClause columns(SqlColumnKey... columnKeys) {
+    public WhereClause columns(ColumnKey... columnKeys) {
         if (columnKeys != null) {
             this.columns.addAll(List.of(columnKeys));
         }
@@ -63,7 +63,7 @@ public class WhereClause implements SqlClause {
     public WhereClause columns(Column... columns) {
         if (columns != null) {
             for (Column column : columns) {
-                this.columns.add(new SqlColumnKey(column.getTable().getName(), column.getName(), null));
+                this.columns.add(new ColumnKey(column.getTable().getName(), column.getName(), null));
             }
         }
         
@@ -111,7 +111,7 @@ public class WhereClause implements SqlClause {
             if (operator != null && operator != WhereOperator.NONE) {
                 sb.append(operator.name()).append(" ");
             }
-            SqlColumnKey column = this.columns.get(i);
+            ColumnKey column = this.columns.get(i);
             if (column.getTableName() != null) {
                 sb.append("`").append(column.getTableName()).append("`.");
             }

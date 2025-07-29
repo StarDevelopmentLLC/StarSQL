@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class SqlUpdate implements SqlStatement {
     private final String tableName;
     
-    private List<SqlColumnKey> columns = new LinkedList<>();
+    private List<ColumnKey> columns = new LinkedList<>();
     private List<Object> values = new LinkedList<>();
     private WhereClause whereClause = new WhereClause();
     
@@ -34,7 +34,7 @@ public class SqlUpdate implements SqlStatement {
         }
     }
     
-    public SqlUpdate add(SqlColumnKey columnKey, Object value) {
+    public SqlUpdate add(ColumnKey columnKey, Object value) {
         this.columns.add(columnKey);
         this.values.add(value);
         return this;
@@ -45,19 +45,19 @@ public class SqlUpdate implements SqlStatement {
     }
 
     public SqlUpdate add(String column, Object value) {
-        return add(new SqlColumnKey(tableName, column, null), value);
+        return add(new ColumnKey(tableName, column, null), value);
     }
     
     public SqlUpdate columns(String... columns) {
         if (columns != null) {
             for (String column : columns) {
-                this.columns.add(new SqlColumnKey(tableName, column, null));
+                this.columns.add(new ColumnKey(tableName, column, null));
             }
         }
         return this;
     }
     
-    public SqlUpdate columns(SqlColumnKey... columnKeys) {
+    public SqlUpdate columns(ColumnKey... columnKeys) {
         if (columnKeys != null) {
             this.columns.addAll(List.of(columnKeys));
         }
@@ -111,7 +111,7 @@ public class SqlUpdate implements SqlStatement {
         }
         
         StringBuilder sb = new StringBuilder("UPDATE `").append(tableName).append("` (");
-        for (SqlColumnKey column : columns) {
+        for (ColumnKey column : columns) {
             String tableName = column.getTableName() != null ? "`" + column.getTableName() + "`." : "";
             String columnName = column.getAlias() != null ? column.getAlias() : column.getColumnName();
             sb.append("`").append(tableName).append("`.`").append(columnName).append("`, ");

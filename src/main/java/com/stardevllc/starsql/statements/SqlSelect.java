@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 public class SqlSelect implements SqlStatement {
     private final String tableName;
-    private List<SqlColumnKey> columns = new LinkedList<>();
+    private List<ColumnKey> columns = new LinkedList<>();
     private WhereClause whereClause = new WhereClause();
     private List<JoinClause> joinClauses = new LinkedList<>();
     private OrderByClause orderByClause = new OrderByClause();
@@ -42,14 +42,14 @@ public class SqlSelect implements SqlStatement {
         }
         this.tableName = table.getName();
         if (allColumns) {
-            table.getColumns().forEach((name, column) -> columns.add(new SqlColumnKey(this.tableName, column.getName(), null)));
+            table.getColumns().forEach((name, column) -> columns.add(new ColumnKey(this.tableName, column.getName(), null)));
         }
     }
     
     public SqlSelect columns(String... columns) {
         if (columns != null) {
             for (String column : columns) {
-                this.columns.add(new SqlColumnKey(this.tableName, column, null));
+                this.columns.add(new ColumnKey(this.tableName, column, null));
             }
         }
         return this;
@@ -58,14 +58,14 @@ public class SqlSelect implements SqlStatement {
     public SqlSelect columns(Column... columns) {
         if (columns != null) {
             for (Column column : columns) {
-                this.columns.add(new SqlColumnKey(column.getTable().getName(), column.getName(), null));
+                this.columns.add(new ColumnKey(column.getTable().getName(), column.getName(), null));
             }
         }
         
         return this;
     }
     
-    public SqlSelect columns(SqlColumnKey... columns) {
+    public SqlSelect columns(ColumnKey... columns) {
         if (columns != null) {
             this.columns.addAll(List.of(columns));
         }
@@ -90,10 +90,10 @@ public class SqlSelect implements SqlStatement {
     }
 
     public SqlSelect addColumn(String table, String column, String alias) {
-        return addColumn(new SqlColumnKey(table, column, alias));
+        return addColumn(new ColumnKey(table, column, alias));
     }
     
-    public SqlSelect addColumn(SqlColumnKey column) {
+    public SqlSelect addColumn(ColumnKey column) {
         this.columns.add(column);
         return this;
     }
@@ -167,7 +167,7 @@ public class SqlSelect implements SqlStatement {
             sb.append("*");
         }
 
-        for (SqlColumnKey column : this.columns) {
+        for (ColumnKey column : this.columns) {
             String tableName = column.getTableName() != null ? "`" + column.getTableName() + "`.`" : "";
             sb.append(tableName).append(column.getColumnName()).append("`");
             if (column.getAlias() != null) {

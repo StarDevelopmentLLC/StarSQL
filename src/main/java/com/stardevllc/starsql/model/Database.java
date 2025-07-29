@@ -1,5 +1,7 @@
 package com.stardevllc.starsql.model;
 
+import com.stardevllc.starsql.statements.ColumnKey;
+
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
@@ -64,7 +66,7 @@ public class Database {
             
             Map<String, Set<String>> uniqueKeys = new HashMap<>();
             
-            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `CONSTRAINT_NAME` FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE `TABLE_SCHEMA`=? AND `CONSTRAINT_TYPE`='UNIQUE';")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `CONSTRAINT_NAME`, `CONSTRAINT_TYPE` FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE `TABLE_SCHEMA`=? AND `CONSTRAINT_TYPE`='UNIQUE';")) {
                 statement.setString(1, this.name);
                 
                 try (ResultSet resultSet = statement.executeQuery()) {
@@ -77,6 +79,24 @@ public class Database {
                         } else {
                             uniqueKeys.put(table, new HashSet<>(Set.of(constraintName)));
                         }
+                    }
+                }
+            }
+            
+            Map<ColumnKey, ColumnKey> foreignKeys = new HashMap<>();
+            
+            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `COLUMN_NAME`, `REFERENCED_TABLE_NAME`, `REFERENCED_COLUMN_NAME` FROM `information_schema`.`KEY_COLUMN_USAGE` WHERE KEY_COLUMN_USAGE.`CONSTRAINT_SCHEMA`=? AND KEY_COLUMN_USAGE.`REFERENCED_COLUMN_NAME` IS NOT NULL;")) {
+                statement.setString(1, this.name);
+                
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String tableName = resultSet.getString("TABLE_NAME");
+                        String columName = resultSet.getString("COLUMN_NAME");
+                        
+                        String referencedTableName = resultSet.getString("REFERENCED_TABLE_NAME");
+                        String referencedColumnName = resultSet.getString("REFERENCED_COLUMN_NAME");
+                        
+                        foreignKeys.put(new ColumnKey(tableName, columName, null), new ColumnKey(referencedTableName, referencedColumnName, null));
                     }
                 }
             }
@@ -108,8 +128,9 @@ public class Database {
                         boolean autoIncrement = Objects.equals(isAutoIncrement, "YES");
                         boolean primaryKey = Objects.equals(primaryKeyColumn, name);
                         boolean unique = primaryKey || uniqueColumns.contains(name);
+                        ColumnKey foreignKey = foreignKeys.get(new ColumnKey(this.name, name, null));
                         
-                        Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey, unique);
+                        Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey, unique, foreignKey);
                         table.addColumn(column);
                     }
                 } catch (SQLException e) {
