@@ -19,6 +19,10 @@ public class Database {
             } catch (Exception e) {
             }
         }
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (Exception e) {}
     }
     
     private String name;
