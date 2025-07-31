@@ -30,7 +30,7 @@ publishing {
 }
 
 dependencies {
-    api('com.mysql:mysql-connector-j:8.1.0') {
+    api('com.mysql:mysql-connector-j:9.4.0') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
     }
 }

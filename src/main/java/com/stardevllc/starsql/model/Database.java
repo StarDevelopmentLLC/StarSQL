@@ -118,7 +118,12 @@ public class Database {
                     while (columnResults.next()) {
                         String name = columnResults.getString("COLUMN_NAME");
                         String type = TYPES_MAP.get(columnResults.getInt("DATA_TYPE"));
-                        int size = columnResults.getInt("COLUMN_SIZE");
+                        int size;
+                        if (type.equalsIgnoreCase("varchar")) {
+                            size = columnResults.getInt("COLUMN_SIZE");
+                        } else {
+                            size = 0;
+                        }
                         int position = columnResults.getInt("ORDINAL_POSITION");
                         String isNullable = columnResults.getString("IS_NULLABLE");
                         boolean nullable = Objects.equals(isNullable, "YES");
