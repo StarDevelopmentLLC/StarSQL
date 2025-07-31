@@ -1,41 +1,58 @@
 package com.stardevllc.starsql.model;
 
+import com.stardevllc.starsql.statements.SqlSelect;
+
 import java.util.*;
 
 public class Table {
-    private String database;
-    private String name;
-    private Map<String, Column> columns = new HashMap<>();
+    protected Database database;
+    protected String databaseName;
+    protected String name;
+    protected Map<String, Column> columns = new HashMap<>();
 
-    public Table(String database, String name, Map<String, Column> columns) {
-        this.database = database;
+    public Table(String databaseName, String name, Map<String, Column> columns) {
+        this.databaseName = databaseName;
         this.name = name;
         this.columns.putAll(columns);
     }
     
     public Table(Database database, String name, Map<String, Column> columns) {
         this(database.getName(), name, columns);
+        this.database = database;
     }
     
-    public Table(String database, String name) {
-        this.database = database;
+    public Table(String databaseName, String name) {
+        this.databaseName = databaseName;
         this.name = name;
     }
     
     public Table(Database database, String name) {
         this(database.getName(), name);
+        this.database = database;
     }
-
+    
+    public SqlSelect select() {
+        return new SqlSelect(this, true);
+    }
+    
+    public Database getDatabase() {
+        return database;
+    }
+    
+    public void setDatabase(Database database) {
+        this.database = database;
+    }
+    
     public String getName() {
         return name;
     }
     
-    public String getDatabase() {
-        return database;
+    public String getDatabaseName() {
+        return databaseName;
     }
     
     public String getFullyQualifiedName() {
-        return "`" + database + "`.`" + name + "`";
+        return "`" + databaseName + "`.`" + name + "`";
     }
     
     public Map<String, Column> getColumns() {

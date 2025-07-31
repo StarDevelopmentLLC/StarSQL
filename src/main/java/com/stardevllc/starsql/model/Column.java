@@ -16,9 +16,9 @@ public class Column {
     private boolean primaryKey;
     private boolean unique;
     
-    private ColumnKey foreignKey;
+    private ForeignKey foreignKey;
     
-    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey, boolean unique, ColumnKey foreignKey) {
+    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey, boolean unique, ForeignKey foreignKey) {
         this.table = table;
         this.name = name;
         this.type = type;
@@ -39,7 +39,7 @@ public class Column {
         return new ColumnKey(this.table.getName(), this.name, alias);
     }
     
-    public ColumnKey getForeignKey() {
+    public ForeignKey getForeignKey() {
         return foreignKey;
     }
     

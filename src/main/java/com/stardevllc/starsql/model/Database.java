@@ -1,7 +1,5 @@
 package com.stardevllc.starsql.model;
 
-import com.stardevllc.starsql.statements.ColumnKey;
-
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
@@ -46,7 +44,7 @@ public class Database {
         this.password = password;
     }
     
-    public void retrieveDatabaseInformation() {
+    public void retrieveDatabaseInformation() throws SQLException {
         try (Connection connection = connect()) {
             DatabaseMetaData databaseMeta = connection.getMetaData();
             this.majorVersion = databaseMeta.getDatabaseMajorVersion();
@@ -64,8 +62,6 @@ public class Database {
                 while (tableResults.next()) {
                     tableNames.add(tableResults.getString("TABLE_NAME"));
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
             
             Map<String, Set<String>> uniqueKeys = new HashMap<>();
@@ -87,7 +83,7 @@ public class Database {
                 }
             }
             
-            Map<ColumnKey, ColumnKey> foreignKeys = new HashMap<>();
+            List<ForeignKey> foreignKeys = new ArrayList<>();
             
             try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `COLUMN_NAME`, `REFERENCED_TABLE_NAME`, `REFERENCED_COLUMN_NAME` FROM `information_schema`.`KEY_COLUMN_USAGE` WHERE KEY_COLUMN_USAGE.`CONSTRAINT_SCHEMA`=? AND KEY_COLUMN_USAGE.`REFERENCED_COLUMN_NAME` IS NOT NULL;")) {
                 statement.setString(1, this.name);
@@ -100,7 +96,7 @@ public class Database {
                         String referencedTableName = resultSet.getString("REFERENCED_TABLE_NAME");
                         String referencedColumnName = resultSet.getString("REFERENCED_COLUMN_NAME");
                         
-                        foreignKeys.put(new ColumnKey(tableName, columName, null), new ColumnKey(referencedTableName, referencedColumnName, null));
+                        foreignKeys.add(new ForeignKey(tableName, columName, referencedTableName, referencedColumnName));
                     }
                 }
             }
@@ -114,8 +110,6 @@ public class Database {
                     while (pkResults.next()) {
                         primaryKeyColumn = pkResults.getString("COLUMN_NAME");
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
                 
                 Set<String> uniqueColumns = uniqueKeys.getOrDefault(tableName, new HashSet<>());
@@ -132,19 +126,24 @@ public class Database {
                         boolean autoIncrement = Objects.equals(isAutoIncrement, "YES");
                         boolean primaryKey = Objects.equals(primaryKeyColumn, name);
                         boolean unique = primaryKey || uniqueColumns.contains(name);
-                        ColumnKey foreignKey = foreignKeys.get(new ColumnKey(this.name, name, null));
+                        
+                        ForeignKey foreignKey = null;
+                        
+                        for (ForeignKey fk : foreignKeys) {
+                            if (fk.getTable().equalsIgnoreCase(table.getName()) && fk.getColumn().equalsIgnoreCase(name)) {
+                                foreignKey = fk;
+                                break;
+                            }
+                        }
                         
                         Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey, unique, foreignKey);
                         table.addColumn(column);
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
                 
+                table.setDatabase(this);
                 this.tables.put(table.getName().toLowerCase(), table);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
     
@@ -186,6 +185,17 @@ public class Database {
     
     public Table getTable(String name) {
         return this.tables.get(name.toLowerCase());
+    }
+    
+    public Table getOrCreateTable(String name) {
+        if (this.tables.containsKey(name.toLowerCase())) {
+            return this.tables.get(name.toLowerCase());
+        }
+        
+        Table table = new Table(this, name);
+        table.setDatabase(this);
+        this.tables.put(name.toLowerCase(), table);
+        return table;
     }
     
     public Map<String, Table> getTables() {
@@ -247,5 +257,10 @@ public class Database {
     
     public int getMaxTableNameLength() {
         return maxTableNameLength;
+    }
+    
+    public void addTable(Table table) {
+        table.setDatabase(this);
+        this.tables.put(table.getName().toLowerCase(), table);
     }
 }

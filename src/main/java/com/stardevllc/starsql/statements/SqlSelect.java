@@ -47,6 +47,7 @@ public class SqlSelect implements SqlStatement {
     }
     
     public SqlSelect columns(String... columns) {
+        this.columns.clear();
         if (columns != null) {
             for (String column : columns) {
                 this.columns.add(new ColumnKey(this.tableName, column, null));
@@ -56,6 +57,7 @@ public class SqlSelect implements SqlStatement {
     }
     
     public SqlSelect columns(Column... columns) {
+        this.columns.clear();
         if (columns != null) {
             for (Column column : columns) {
                 this.columns.add(new ColumnKey(column.getTable().getName(), column.getName(), null));
@@ -66,6 +68,7 @@ public class SqlSelect implements SqlStatement {
     }
     
     public SqlSelect columns(ColumnKey... columns) {
+        this.columns.clear();
         if (columns != null) {
             this.columns.addAll(List.of(columns));
         }

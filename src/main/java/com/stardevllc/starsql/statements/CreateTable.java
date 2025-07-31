@@ -1,6 +1,7 @@
 package com.stardevllc.starsql.statements;
 
 import com.stardevllc.starsql.model.Column;
+import com.stardevllc.starsql.model.ForeignKey;
 
 import java.util.*;
 
@@ -37,10 +38,33 @@ public class CreateTable implements SqlStatement {
     
     @Override
     public String build() {
+        SortedSet<Column> columns = new TreeSet<>((o1, o2) -> {
+            if (o1.getPosition() == 0) {
+                return -1;
+            }
+            
+            if (o2.getPosition() == 0) {
+                return 1;
+            }
+            
+            if (o1.getPosition() == o2.getPosition()) {
+                return 1;
+            }
+            
+            return Integer.compare(o1.getPosition(), o2.getPosition());
+        });
+        
+        columns.addAll(this.columns.values());
+        
+        List<ForeignKey> foreignKeys = new ArrayList<>();
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
-        sb.append(this.name);
-        for (Column column : this.columns.values()) {
+        sb.append(this.name).append(" (");
+        for (Column column : columns) {
             sb.append("`").append(column.getName()).append("`").append(" ").append(column.getType());
+            if (column.getSize() > 0) {
+                sb.append("(").append(column.getSize()).append(")");
+            }
+            
             if (column.isPrimaryKey()) {
                 sb.append(" PRIMARY KEY");
             }
@@ -58,6 +82,16 @@ public class CreateTable implements SqlStatement {
             }
             
             sb.append(", ");
+            
+            if (column.getForeignKey() != null) {
+                foreignKeys.add(column.getForeignKey());
+            }
+        }
+        
+        if (!foreignKeys.isEmpty()) {
+            for (ForeignKey foreignKey : foreignKeys) {
+                sb.append("FOREIGN KEY (").append("`").append(foreignKey.getColumn()).append("`) REFERENCES `").append(foreignKey.getReferencedTable()).append("`(`").append(foreignKey.getReferencedColumn()).append("`), ");
+            }
         }
         
         sb.delete(sb.length() - 2, sb.length());
