@@ -60,7 +60,7 @@ public class CreateTable implements SqlStatement {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
         sb.append(this.name).append(" (");
         for (Column column : columns) {
-            sb.append("`").append(column.getName()).append("`").append(" ").append(column.getType());
+            sb.append("`").append(column.getName()).append("`").append(" ").append(column.getType().getDataType());
             if (column.getType().getSize() > 0) {
                 sb.append("(").append(column.getType().getSize()).append(")");
             }
