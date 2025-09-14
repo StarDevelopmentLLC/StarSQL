@@ -1,5 +1,8 @@
 package com.stardevllc.starsql.model;
 
+import com.stardevllc.starsql.model.Column.Option;
+import com.stardevllc.starsql.model.Column.Type;
+
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
@@ -20,7 +23,8 @@ public class Database {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
     
     private String name;
@@ -125,12 +129,6 @@ public class Database {
                             size = 0;
                         }
                         int position = columnResults.getInt("ORDINAL_POSITION");
-                        String isNullable = columnResults.getString("IS_NULLABLE");
-                        boolean nullable = Objects.equals(isNullable, "YES");
-                        String isAutoIncrement = columnResults.getString("IS_AUTOINCREMENT");
-                        boolean autoIncrement = Objects.equals(isAutoIncrement, "YES");
-                        boolean primaryKey = Objects.equals(primaryKeyColumn, name);
-                        boolean unique = primaryKey || uniqueColumns.contains(name);
                         
                         ForeignKey foreignKey = null;
                         
@@ -141,7 +139,26 @@ public class Database {
                             }
                         }
                         
-                        Column column = new Column(table, name, type, size, position, nullable, autoIncrement, primaryKey, unique, foreignKey);
+                        Column column = new Column(table, name, new Type(type, size), position, foreignKey);
+                        
+                        String isNullable = columnResults.getString("IS_NULLABLE");
+                        if (Objects.equals(isNullable, "YES")) {
+                            column.addOption(Option.NULLABLE);
+                        }
+                        
+                        String isAutoIncrement = columnResults.getString("IS_AUTOINCREMENT");
+                        if (Objects.equals(isAutoIncrement, "YES")) {
+                            column.addOption(Option.AUTO_INCREMENT);
+                        }
+                        
+                        if (Objects.equals(primaryKeyColumn, name)) {
+                            column.addOption(Option.PRIMARY_KEY);
+                        }
+                        
+                        if (uniqueColumns.contains(name)) {
+                            column.addOption(Option.UNIQUE);
+                        }
+                        
                         table.addColumn(column);
                     }
                 }

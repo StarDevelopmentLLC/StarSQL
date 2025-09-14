@@ -61,8 +61,8 @@ public class CreateTable implements SqlStatement {
         sb.append(this.name).append(" (");
         for (Column column : columns) {
             sb.append("`").append(column.getName()).append("`").append(" ").append(column.getType());
-            if (column.getSize() > 0) {
-                sb.append("(").append(column.getSize()).append(")");
+            if (column.getType().getSize() > 0) {
+                sb.append("(").append(column.getType().getSize()).append(")");
             }
             
             if (column.isPrimaryKey()) {

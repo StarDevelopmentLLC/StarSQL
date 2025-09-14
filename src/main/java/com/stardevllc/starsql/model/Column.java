@@ -2,15 +2,18 @@ package com.stardevllc.starsql.model;
 
 import com.stardevllc.starsql.statements.ColumnKey;
 
-import java.util.Objects;
+import java.util.*;
 
 public class Column {
     private Table table;
     private String name;
     
-    private String type;
-    private int size;
+    private Type type;
+    
     private int position;
+    
+    private EnumSet<Option> options = EnumSet.noneOf(Option.class);
+    
     private boolean nullable;
     private boolean autoIncrement;
     private boolean primaryKey;
@@ -18,17 +21,45 @@ public class Column {
     
     private ForeignKey foreignKey;
     
-    public Column(Table table, String name, String type, int size, int position, boolean nullable, boolean autoIncrement, boolean primaryKey, boolean unique, ForeignKey foreignKey) {
+    public enum Option {
+        NULLABLE, AUTO_INCREMENT, PRIMARY_KEY, UNIQUE
+    }
+    
+    public static class Type {
+        private String dataType;
+        private int size;
+        
+        public Type(String dataType, int size) {
+            this.dataType = dataType;
+            this.size = size;
+        }
+        
+        public Type(String dataType) {
+            this.dataType = dataType;
+        }
+        
+        public String getDataType() {
+            return dataType;
+        }
+        
+        public int getSize() {
+            return size;
+        }
+    }
+    
+    public Column(Table table, String name, Type type, int position, ForeignKey foreignKey, Option... options) {
         this.table = table;
         this.name = name;
         this.type = type;
-        this.size = size;
         this.position = position;
-        this.nullable = nullable;
-        this.autoIncrement = autoIncrement;
-        this.primaryKey = primaryKey;
-        this.unique = unique;
         this.foreignKey = foreignKey;
+        if (options != null) {
+            this.options.addAll(List.of(options));
+        }
+    }
+    
+    public Column(Table table, String name, Type type, int position, Option... options) {
+        this(table, name, type, position, null, options);
     }
 
     public ColumnKey toKey() {
@@ -51,32 +82,46 @@ public class Column {
         return name;
     }
     
-    public String getType() {
+    public Type getType() {
         return type;
-    }
-    
-    public int getSize() {
-        return size;
     }
     
     public int getPosition() {
         return position;
     }
     
+    public boolean hasOption(Option option) {
+        return this.options.contains(option);
+    }
+    
+    public void addOption(Option option, Option... options) {
+        this.options.add(option);
+        if (options != null) {
+            this.options.addAll(List.of(options));
+        }
+    }
+    
+    public void removeOption(Option option, Option... options) {
+        this.options.remove(option);
+        if (options != null) {
+            List.of(options).forEach(this.options::remove);
+        }
+    }
+    
     public boolean isNullable() {
-        return nullable;
+        return hasOption(Option.NULLABLE);
     }
     
     public boolean isPrimaryKey() {
-        return primaryKey;
+        return hasOption(Option.PRIMARY_KEY);
     }
     
     public boolean isAutoIncrement() {
-        return autoIncrement;
+        return hasOption(Option.AUTO_INCREMENT);
     }
     
     public boolean isUnique() {
-        return unique;
+        return hasOption(Option.UNIQUE) || hasOption(Option.PRIMARY_KEY);
     }
     
     @Override

@@ -1,5 +1,7 @@
 package com.stardevllc.starsql.model;
 
+import com.stardevllc.starsql.model.Column.Option;
+import com.stardevllc.starsql.model.Column.Type;
 import com.stardevllc.starsql.statements.SqlSelect;
 
 import java.util.*;
@@ -61,6 +63,28 @@ public class Table {
     
     public void addColumn(Column column) {
         this.columns.put(column.getName().toLowerCase(), column);
+    }
+    
+    public Column getOrAddColumn(Column column) {
+        if (!this.columns.containsKey(column.getName().toLowerCase())) {
+            addColumn(column);
+        }
+        
+        return this.getColumn(column.getName());
+    }
+    
+    public Column getOrCreateColumn(String name, Type type, int position, ForeignKey foreignKey, Option... options) {
+        if (this.columns.containsKey(name.toLowerCase())) {
+            return this.getColumn(name);
+        }
+        
+        Column column = new Column(this, name, type, position, foreignKey, options);
+        addColumn(column);
+        return column;
+    }
+    
+    public Column getOrCreateColumn(String name, Type type, int position, Option... options) {
+        return getOrCreateColumn(name, type, position, null, options);
     }
 
     @Override
