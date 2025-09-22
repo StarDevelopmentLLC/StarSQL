@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'com.gradleup.shadow' version '9.0.0-beta13'
+    id 'com.gradleup.shadow' version '9.1.0'
 }
 
 repositories {
@@ -35,8 +35,8 @@ dependencies {
     }
 }
 
-group 'com.stardevllc'
-version '0.2.0'
+group = 'com.stardevllc'
+version = '0.2.0'
 
 tasks.named('shadowJar', ShadowJar) {
     archiveClassifier = ''
