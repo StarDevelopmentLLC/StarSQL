@@ -68,25 +68,6 @@ public class Database {
                 }
             }
             
-            Map<String, Set<String>> uniqueKeys = new HashMap<>();
-            
-            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `CONSTRAINT_NAME`, `CONSTRAINT_TYPE` FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE `TABLE_SCHEMA`=? AND `CONSTRAINT_TYPE`='UNIQUE';")) {
-                statement.setString(1, this.name);
-                
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        String table = resultSet.getString("TABLE_NAME");
-                        String constraintName = resultSet.getString("CONSTRAINT_NAME"); //This is the name of the column if it is a unique constraint
-                        
-                        if (uniqueKeys.containsKey(table)) {
-                            uniqueKeys.get(table).add(constraintName);
-                        } else {
-                            uniqueKeys.put(table, new HashSet<>(Set.of(constraintName)));
-                        }
-                    }
-                }
-            }
-            
             List<ForeignKey> foreignKeys = new ArrayList<>();
             
             try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `COLUMN_NAME`, `REFERENCED_TABLE_NAME`, `REFERENCED_COLUMN_NAME` FROM `information_schema`.`KEY_COLUMN_USAGE` WHERE KEY_COLUMN_USAGE.`CONSTRAINT_SCHEMA`=? AND KEY_COLUMN_USAGE.`REFERENCED_COLUMN_NAME` IS NOT NULL;")) {
@@ -116,7 +97,13 @@ public class Database {
                     }
                 }
                 
-                Set<String> uniqueColumns = uniqueKeys.getOrDefault(tableName, new HashSet<>());
+                Set<String> uniqueColumns = new HashSet<>();
+                
+                try (ResultSet uniqueResults = databaseMeta.getIndexInfo(null, null, tableName, true, true)) {
+                    while (uniqueResults.next()) {
+                        uniqueColumns.add(uniqueResults.getString("COLUMN_NAME"));
+                    }
+                }
                 
                 try (ResultSet columnResults = databaseMeta.getColumns(null, null, tableName, null)) {
                     while (columnResults.next()) {
