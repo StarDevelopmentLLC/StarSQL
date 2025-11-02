@@ -75,8 +75,8 @@ public class SqlInsert implements SqlStatement {
 
         StringBuilder sb = new StringBuilder("INSERT INTO ").append("`").append(tableName).append("` (");
         for (ColumnKey column : columns) {
-            String tableName = column.getTableName() != null ? "`" + column.getTableName() + "`." : "";
-            String columnName = column.getAlias() != null ? column.getAlias() : column.getColumnName();
+            String tableName = column.tableName() != null ? "`" + column.tableName() + "`." : "";
+            String columnName = column.alias() != null ? column.alias() : column.columnName();
 
             sb.append(tableName).append("`").append(columnName).append("`").append(", ");
         }

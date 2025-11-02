@@ -2,6 +2,8 @@ package com.stardevllc.starsql.model;
 
 import com.stardevllc.starsql.model.Column.Option;
 import com.stardevllc.starsql.model.Column.Type;
+import com.stardevllc.starsql.model.ForeignKey.Rule;
+import com.stardevllc.starsql.statements.ColumnKey;
 
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -68,24 +70,6 @@ public class Database {
                 }
             }
             
-            List<ForeignKey> foreignKeys = new ArrayList<>();
-            
-            try (PreparedStatement statement = connection.prepareStatement("SELECT `TABLE_NAME`, `COLUMN_NAME`, `REFERENCED_TABLE_NAME`, `REFERENCED_COLUMN_NAME` FROM `information_schema`.`KEY_COLUMN_USAGE` WHERE KEY_COLUMN_USAGE.`CONSTRAINT_SCHEMA`=? AND KEY_COLUMN_USAGE.`REFERENCED_COLUMN_NAME` IS NOT NULL;")) {
-                statement.setString(1, this.name);
-                
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        String tableName = resultSet.getString("TABLE_NAME");
-                        String columName = resultSet.getString("COLUMN_NAME");
-                        
-                        String referencedTableName = resultSet.getString("REFERENCED_TABLE_NAME");
-                        String referencedColumnName = resultSet.getString("REFERENCED_COLUMN_NAME");
-                        
-                        foreignKeys.add(new ForeignKey(tableName, columName, referencedTableName, referencedColumnName));
-                    }
-                }
-            }
-            
             for (String tableName : tableNames) {
                 Table table = new Table(this, tableName.toLowerCase());
                 
@@ -105,6 +89,24 @@ public class Database {
                     }
                 }
                 
+                List<ForeignKey> tableForeignKeys = new ArrayList<>();
+                try (ResultSet exportedResults = databaseMeta.getImportedKeys(null, null, tableName)) {
+                    while (exportedResults.next()) {
+                        String fkName = exportedResults.getString("FK_NAME");
+                        String pkDatabase = exportedResults.getString("PKTABLE_CAT");
+                        String pkTable = exportedResults.getString("PKTABLE_NAME");
+                        String pkColumn = exportedResults.getString("PKCOLUMN_NAME");
+                        String fkDatabase = exportedResults.getString("FKTABLE_CAT");
+                        String fkTable = exportedResults.getString("FKTABLE_NAME");
+                        String fkColumn = exportedResults.getString("FKCOLUMN_NAME");
+                        Rule updateRule = ForeignKey.Rule.parseRule(exportedResults.getInt("UPDATE_RULE"));
+                        Rule deleteRule = ForeignKey.Rule.parseRule(exportedResults.getInt("DELETE_RULE"));
+                        
+                        ForeignKey foreignKey = new ForeignKey(fkName, new ColumnKey(pkDatabase, pkTable, pkColumn, null), new ColumnKey(fkDatabase, fkTable, fkColumn, null), updateRule, deleteRule);
+                        tableForeignKeys.add(foreignKey);
+                    }
+                }
+                
                 try (ResultSet columnResults = databaseMeta.getColumns(null, null, tableName, null)) {
                     while (columnResults.next()) {
                         String name = columnResults.getString("COLUMN_NAME");
@@ -117,16 +119,14 @@ public class Database {
                         }
                         int position = columnResults.getInt("ORDINAL_POSITION");
                         
-                        ForeignKey foreignKey = null;
-                        
-                        for (ForeignKey fk : foreignKeys) {
-                            if (fk.getTable().equalsIgnoreCase(table.getName()) && fk.getColumn().equalsIgnoreCase(name)) {
-                                foreignKey = fk;
-                                break;
+                        List<ForeignKey> columnForeignKeys = new ArrayList<>();
+                        for (ForeignKey tableForeignKey : tableForeignKeys) {
+                            if (tableForeignKey.referencedTable().columnName().equalsIgnoreCase(name)) {
+                                columnForeignKeys.add(tableForeignKey);
                             }
                         }
                         
-                        Column column = new Column(table, name, new Type(type, size), position, foreignKey);
+                        Column column = new Column(this, table, name, new Type(type, size), position, columnForeignKeys);
                         
                         String isNullable = columnResults.getString("IS_NULLABLE");
                         if (Objects.equals(isNullable, "YES")) {

@@ -42,7 +42,7 @@ public class SqlSelect implements SqlStatement {
         }
         this.tableName = table.getName();
         if (allColumns) {
-            table.getColumns().forEach((name, column) -> columns.add(new ColumnKey(this.tableName, column.getName(), null)));
+            table.getColumns().forEach((name, column) -> columns.add(new ColumnKey(this.tableName, column.getName())));
         }
     }
     
@@ -50,7 +50,7 @@ public class SqlSelect implements SqlStatement {
         this.columns.clear();
         if (columns != null) {
             for (String column : columns) {
-                this.columns.add(new ColumnKey(this.tableName, column, null));
+                this.columns.add(new ColumnKey(this.tableName, column));
             }
         }
         return this;
@@ -60,7 +60,7 @@ public class SqlSelect implements SqlStatement {
         this.columns.clear();
         if (columns != null) {
             for (Column column : columns) {
-                this.columns.add(new ColumnKey(column.getTable().getName(), column.getName(), null));
+                this.columns.add(new ColumnKey(column.getTable().getName(), column.getName()));
             }
         }
         
@@ -171,10 +171,10 @@ public class SqlSelect implements SqlStatement {
         }
 
         for (ColumnKey column : this.columns) {
-            String tableName = column.getTableName() != null ? "`" + column.getTableName() + "`.`" : "";
-            sb.append(tableName).append(column.getColumnName()).append("`");
-            if (column.getAlias() != null) {
-                sb.append(" AS `").append(column.getAlias()).append("`");
+            String tableName = column.tableName() != null ? "`" + column.tableName() + "`.`" : "";
+            sb.append(tableName).append(column.columnName()).append("`");
+            if (column.alias() != null) {
+                sb.append(" AS `").append(column.alias()).append("`");
             }
             sb.append(", ");
         }

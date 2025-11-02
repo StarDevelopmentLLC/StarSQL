@@ -5,6 +5,7 @@ import com.stardevllc.starsql.statements.ColumnKey;
 import java.util.*;
 
 public class Column {
+    private Database database;
     private Table table;
     private String name;
     
@@ -19,7 +20,7 @@ public class Column {
     private boolean primaryKey;
     private boolean unique;
     
-    private ForeignKey foreignKey;
+    private List<ForeignKey> foreignKeys;
     
     public enum Option {
         NULLABLE, AUTO_INCREMENT, PRIMARY_KEY, UNIQUE
@@ -47,19 +48,20 @@ public class Column {
         }
     }
     
-    public Column(Table table, String name, Type type, int position, ForeignKey foreignKey, Option... options) {
+    public Column(Database database, Table table, String name, Type type, int position, List<ForeignKey> foreignKeys, Option... options) {
+        this.database = database;
         this.table = table;
         this.name = name;
         this.type = type;
         this.position = position;
-        this.foreignKey = foreignKey;
+        this.foreignKeys = foreignKeys;
         if (options != null) {
             this.options.addAll(List.of(options));
         }
     }
     
-    public Column(Table table, String name, Type type, int position, Option... options) {
-        this(table, name, type, position, null, options);
+    public Column(Database database, Table table, String name, Type type, int position, Option... options) {
+        this(database, table, name, type, position, null, options);
     }
 
     public ColumnKey toKey() {
@@ -67,11 +69,11 @@ public class Column {
     }
 
     public ColumnKey toKey(String alias) {
-        return new ColumnKey(this.table.getName(), this.name, alias);
+        return new ColumnKey(this.database.getName(), this.table.getName(), this.name, alias);
     }
     
-    public ForeignKey getForeignKey() {
-        return foreignKey;
+    public List<ForeignKey> getForeignKeys() {
+        return foreignKeys;
     }
     
     public Table getTable() {

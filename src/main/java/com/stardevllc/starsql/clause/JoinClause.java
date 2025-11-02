@@ -16,7 +16,7 @@ public class JoinClause implements SqlClause {
     }
 
     public JoinClause(JoinType joinType, ColumnKey table1Column, ColumnKey table2Column) {
-        this(joinType, table1Column.getTableName(), table2Column.getTableName(), table1Column, table2Column);
+        this(joinType, table1Column.tableName(), table2Column.tableName(), table1Column, table2Column);
     }
 
     public JoinClause(JoinType joinType) {
@@ -39,7 +39,7 @@ public class JoinClause implements SqlClause {
     }
 
     public JoinClause setTableOne(String table1Name, String table1Column) {
-        return setTableOne(table1Name, new ColumnKey(table1Name, table1Column, null));
+        return setTableOne(table1Name, new ColumnKey(table1Name, table1Column));
     }
 
     public JoinClause setTableTwo(String table2Name, ColumnKey table2Column) {
@@ -49,7 +49,7 @@ public class JoinClause implements SqlClause {
     }
 
     public JoinClause setTableTwo(String table2Name, String table2Column) {
-        return setTableTwo(table2Name, new ColumnKey(table2Name, table2Column, null));
+        return setTableTwo(table2Name, new ColumnKey(table2Name, table2Column));
     }
     
     public String build() {
@@ -65,8 +65,8 @@ public class JoinClause implements SqlClause {
             throw new IllegalArgumentException("One or both of the colums are not specified.");
         }
 
-        String table1ColumnName = table1Column.getAlias() != null ? table1Column.getAlias() : table1Column.getColumnName();
-        String table2ColumnName = table2Column.getAlias() != null ? table2Column.getAlias() : table2Column.getColumnName();
+        String table1ColumnName = table1Column.alias() != null ? table1Column.alias() : table1Column.columnName();
+        String table2ColumnName = table2Column.alias() != null ? table2Column.alias() : table2Column.columnName();
         return joinType.name() + " JOIN `" + table2Name + "` ON `" + table1Name + "`.`" + table1ColumnName + "`=`" + table2Name + "`.`" + table2ColumnName + "`";
     }
     

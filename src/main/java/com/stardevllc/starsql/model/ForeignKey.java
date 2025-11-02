@@ -1,33 +1,32 @@
 package com.stardevllc.starsql.model;
 
-public class ForeignKey {
-    private String table, column;
-    private String referencedTable, referencedColumn;
+import com.stardevllc.starsql.statements.ColumnKey;
+
+import java.sql.DatabaseMetaData;
+
+public record ForeignKey(String name, ColumnKey primaryTable, ColumnKey referencedTable, Rule updateRule, Rule deleteRule) {
     
-    public ForeignKey(String table, String column, String referencedTable, String referencedColumn) {
-        this.table = table;
-        this.column = column;
-        this.referencedTable = referencedTable;
-        this.referencedColumn = referencedColumn;
-    }
-    
-    public ForeignKey(Column column, Column referencedColumn) {
-        this(column.getTable().getName(), column.getName(), referencedColumn.getTable().getName(), referencedColumn.getName());
-    }
-    
-    public String getTable() {
-        return table;
-    }
-    
-    public String getColumn() {
-        return column;
-    }
-    
-    public String getReferencedTable() {
-        return referencedTable;
-    }
-    
-    public String getReferencedColumn() {
-        return referencedColumn;
+    public enum Rule {
+        NO_ACTION(DatabaseMetaData.importedKeyNoAction),
+        CASCADE(DatabaseMetaData.importedKeyCascade),
+        SET_NULL(DatabaseMetaData.importedKeySetNull),
+        SET_DEFAULT(DatabaseMetaData.importedKeySetDefault),
+        RESTRICT(DatabaseMetaData.importedKeyRestrict);
+        
+        private final int metadataValue;
+        
+        Rule(int metadataValue) {
+            this.metadataValue = metadataValue;
+        }
+        
+        public static Rule parseRule(int value) {
+            for (Rule rule : values()) {
+                if (rule.metadataValue == value) {
+                    return rule;
+                }
+            }
+            
+            return RESTRICT;
+        }
     }
 }

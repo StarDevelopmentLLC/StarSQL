@@ -63,7 +63,7 @@ public class WhereClause implements SqlClause {
     public WhereClause columns(Column... columns) {
         if (columns != null) {
             for (Column column : columns) {
-                this.columns.add(new ColumnKey(column.getTable().getName(), column.getName(), null));
+                this.columns.add(new ColumnKey(column.getTable().getName(), column.getName()));
             }
         }
         
@@ -112,10 +112,10 @@ public class WhereClause implements SqlClause {
                 sb.append(operator.name()).append(" ");
             }
             ColumnKey column = this.columns.get(i);
-            if (column.getTableName() != null) {
-                sb.append("`").append(column.getTableName()).append("`.");
+            if (column.tableName() != null) {
+                sb.append("`").append(column.tableName()).append("`.");
             }
-            sb.append("`").append(column.getColumnName()).append("`").append(this.conditions.get(i)).append("'").append(this.values.get(i)).append("' ");
+            sb.append("`").append(column.columnName()).append("`").append(this.conditions.get(i)).append("'").append(this.values.get(i)).append("' ");
         }
         
         return sb.toString().trim();

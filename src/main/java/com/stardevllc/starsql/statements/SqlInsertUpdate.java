@@ -74,7 +74,7 @@ public class SqlInsertUpdate extends SqlInsert {
         for (int i = 0; i < this.columns.size(); i++) {
             ColumnKey column = this.columns.get(i);
             Object object = row.get(i);
-            sb.append("`").append(column.getColumnName()).append("`='").append(object).append("', ");
+            sb.append("`").append(column.columnName()).append("`='").append(object).append("', ");
         }
 
         sb.delete(sb.length() - 2, sb.length());

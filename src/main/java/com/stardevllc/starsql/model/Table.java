@@ -8,29 +8,19 @@ import java.util.*;
 
 public class Table {
     protected Database database;
-    protected String databaseName;
     protected String name;
     protected Map<String, Column> columns = new HashMap<>();
-
-    public Table(String databaseName, String name, Map<String, Column> columns) {
-        this.databaseName = databaseName;
-        this.name = name;
-        this.columns.putAll(columns);
-    }
     
     public Table(Database database, String name, Map<String, Column> columns) {
-        this(database.getName(), name, columns);
         this.database = database;
-    }
-    
-    public Table(String databaseName, String name) {
-        this.databaseName = databaseName;
         this.name = name;
+        if (columns != null) {
+            this.columns.putAll(columns);
+        }
     }
     
     public Table(Database database, String name) {
-        this(database.getName(), name);
-        this.database = database;
+        this(database, name, null);
     }
     
     public SqlSelect select() {
@@ -49,12 +39,8 @@ public class Table {
         return name;
     }
     
-    public String getDatabaseName() {
-        return databaseName;
-    }
-    
     public String getFullyQualifiedName() {
-        return "`" + databaseName + "`.`" + name + "`";
+        return "`" + this.database.getName() + "`.`" + name + "`";
     }
     
     public Map<String, Column> getColumns() {
@@ -78,7 +64,7 @@ public class Table {
             return this.getColumn(name);
         }
         
-        Column column = new Column(this, name, type, position, foreignKey, options);
+        Column column = new Column(this.database, this, name, type, position, List.of(), options);
         addColumn(column);
         return column;
     }
@@ -86,7 +72,7 @@ public class Table {
     public Column getOrCreateColumn(String name, Type type, int position, Option... options) {
         return getOrCreateColumn(name, type, position, null, options);
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -98,16 +84,16 @@ public class Table {
         Table table = (Table) o;
         return name.equalsIgnoreCase(table.name);
     }
-
+    
     @Override
     public int hashCode() {
         return Objects.hash(name);
     }
-
+    
     public int compareTo(Column o) {
         return this.name.compareTo(o.getName());
     }
-
+    
     public Column getColumn(String columnName) {
         return this.columns.get(columnName.toLowerCase());
     }

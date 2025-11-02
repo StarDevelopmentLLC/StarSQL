@@ -83,14 +83,14 @@ public class CreateTable implements SqlStatement {
             
             sb.append(", ");
             
-            if (column.getForeignKey() != null) {
-                foreignKeys.add(column.getForeignKey());
+            if (column.getForeignKeys() != null && !column.getForeignKeys().isEmpty()) {
+                foreignKeys.addAll(column.getForeignKeys());
             }
         }
         
         if (!foreignKeys.isEmpty()) {
             for (ForeignKey foreignKey : foreignKeys) {
-                sb.append("FOREIGN KEY (").append("`").append(foreignKey.getColumn()).append("`) REFERENCES `").append(foreignKey.getReferencedTable()).append("`(`").append(foreignKey.getReferencedColumn()).append("`), ");
+                sb.append("CONSTRAINT ").append(foreignKey.name()).append(" FOREIGN KEY (").append("`").append(foreignKey.referencedTable().columnName()).append("`) REFERENCES `").append(foreignKey.primaryTable().tableName()).append("`(`").append(foreignKey.primaryTable().columnName()).append("`) ").append("ON DELETE ").append(foreignKey.deleteRule().name().replace("_", " ")).append(" ON UPDATE ").append(foreignKey.updateRule().name().replace("_", " ")).append(", ");
             }
         }
         
