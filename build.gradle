@@ -1,9 +1,6 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'com.gradleup.shadow' version '9.1.0'
 }
 
 repositories {
@@ -37,11 +34,6 @@ dependencies {
 group = 'com.stardevllc'
 version = '0.3.0'
 
-tasks.named('shadowJar', ShadowJar) {
-    archiveClassifier = ''
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -52,8 +44,6 @@ java {
 }
 
 tasks.compileJava.dependsOn(clean)
-tasks.jar.finalizedBy(shadowJar)
-tasks.publishToMavenLocal.dependsOn(shadowJar)
 tasks.publishToMavenLocal.dependsOn(javadocJar)
 tasks.publishToMavenLocal.dependsOn(sourcesJar)
 tasks.build.finalizedBy(publishToMavenLocal)
