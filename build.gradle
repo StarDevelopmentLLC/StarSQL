@@ -30,18 +30,16 @@ publishing {
 }
 
 dependencies {
-    api('com.mysql:mysql-connector-j:9.4.0') {
-        exclude group: 'com.google.protobuf', module: 'protobuf-java'
-    }
+//    compileOnly('com.mysql:mysql-connector-j:9.4.0')
+//    compileOnly 'org.xerial:sqlite-jdbc:3.50.3.0'
 }
 
 group = 'com.stardevllc'
-version = '0.2.0'
+version = '0.3.0'
 
 tasks.named('shadowJar', ShadowJar) {
     archiveClassifier = ''
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    relocate('com.mysql', 'com.stardevllc.mysql')
 }
 
 java {
