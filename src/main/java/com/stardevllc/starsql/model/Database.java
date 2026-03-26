@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
 
+@SuppressWarnings("SqlSourceToSinkFlow")
 public class Database {
     
     private static final Map<Integer, String> TYPES_MAP = new HashMap<>();
@@ -145,7 +146,6 @@ public class Database {
                     }
                 }
                 
-                table.setDatabase(this);
                 this.tables.put(table.getName().toLowerCase(), table);
             }
         }
@@ -172,15 +172,20 @@ public class Database {
         }
     }
     
-    public int executeUpdate(String sql) {
+    public long executeUpdate(String sql) {
         try (Connection connection = connect(); Statement statement = connection.createStatement()) {
-            return statement.executeUpdate(sql);
+            statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error with statement: " + sql);
         }
         
-        return Integer.MIN_VALUE;
+        return 0;
     }
     
     public String getName() {
@@ -192,13 +197,22 @@ public class Database {
     }
     
     public Table getOrCreateTable(String name) {
+        return getOrCreateTable(name, null);
+    }
+    
+    public Table getOrCreateTable(String name, Table.Builder tableBuilder) {
         if (this.tables.containsKey(name.toLowerCase())) {
             return this.tables.get(name.toLowerCase());
         }
         
-        Table table = new Table(this, name);
-        table.setDatabase(this);
-        this.tables.put(name.toLowerCase(), table);
+        Table table;
+        if (tableBuilder != null) {
+            table = tableBuilder.database(this).name(name).build();
+        } else {
+            table = new Table(this, name);
+        }
+        
+        addTable(table);
         return table;
     }
     
@@ -264,7 +278,6 @@ public class Database {
     }
     
     public void addTable(Table table) {
-        table.setDatabase(this);
         this.tables.put(table.getName().toLowerCase(), table);
     }
 }

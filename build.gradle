@@ -5,6 +5,10 @@ plugins {
 
 repositories {
     mavenCentral()
+
+    maven {
+        url "https://repo.stardevllc.com/releases"
+    }
 }
 
 publishing {
@@ -29,10 +33,11 @@ publishing {
 dependencies {
 //    compileOnly('com.mysql:mysql-connector-j:9.4.0')
 //    compileOnly 'org.xerial:sqlite-jdbc:3.50.3.0'
+    compileOnly ("com.stardevllc:StarLib:${starlibVersion}")
 }
 
 group = 'com.stardevllc'
-version = '0.3.0'
+version = '0.4.0'
 
 java {
     toolchain {

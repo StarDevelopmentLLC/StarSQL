@@ -1,15 +1,17 @@
 package com.stardevllc.starsql.model;
 
+import com.stardevllc.starlib.objects.builder.IBuilder;
 import com.stardevllc.starsql.model.Column.Option;
 import com.stardevllc.starsql.model.Column.Type;
 import com.stardevllc.starsql.statements.SqlSelect;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class Table {
-    protected Database database;
-    protected String name;
-    protected Map<String, Column> columns = new HashMap<>();
+    private final Database database;
+    private final String name;
+    private final Map<String, Column> columns = new HashMap<>();
     
     public Table(Database database, String name, Map<String, Column> columns) {
         this.database = database;
@@ -17,6 +19,12 @@ public class Table {
         if (columns != null) {
             this.columns.putAll(columns);
         }
+    }
+    
+    private Table(Builder builder) {
+        this.database = builder.database;
+        this.name = builder.name;
+        this.columns.putAll(builder.columns);
     }
     
     public Table(Database database, String name) {
@@ -29,10 +37,6 @@ public class Table {
     
     public Database getDatabase() {
         return database;
-    }
-    
-    public void setDatabase(Database database) {
-        this.database = database;
     }
     
     public String getName() {
@@ -96,5 +100,65 @@ public class Table {
     
     public Column getColumn(String columnName) {
         return this.columns.get(columnName.toLowerCase());
+    }
+    
+    public static class Builder implements IBuilder<Table, Builder> {
+        
+        private Database database;
+        private String name;
+        private final Map<String, Column> columns = new HashMap<>();
+        private final List<Column.Builder> columnBuilders = new ArrayList<>();
+        
+        private Builder() {}
+        
+        private Builder(Builder builder) {
+            this.database = builder.database;
+            this.name = builder.name;
+            this.columns.putAll(builder.columns);
+        }
+        
+        public Builder database(Database database) {
+            this.database = database;
+            return self();
+        }
+        
+        public Builder name(String name) {
+            this.name = name;
+            return self();
+        }
+        
+        public Builder addColumn(Column column) {
+            this.columns.put(column.getName(), column);
+            return self();
+        }
+        
+        public Builder addColumn(Column.Builder columnBuilder) {
+            this.columnBuilders.add(columnBuilder);
+            return self();
+        }
+        
+        public Builder column(Consumer<Column.Builder> columnBuilderConsumer) {
+            Column.Builder builder = Column.builder();
+            columnBuilderConsumer.accept(builder);
+            return addColumn(builder);
+        }
+        
+        @Override
+        public Table build() {
+            Table table = new Table(this);
+            if (!this.columnBuilders.isEmpty()) {
+                for (Column.Builder columnBuilder : this.columnBuilders) {
+                    columnBuilder.database(this.database).table(table);
+                    table.addColumn(columnBuilder.build());
+                }
+            }
+            
+            return table;
+        }
+        
+        @Override
+        public Builder clone() {
+            return new Builder(this);
+        }
     }
 }
