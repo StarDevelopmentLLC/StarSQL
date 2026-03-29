@@ -68,7 +68,7 @@ public class Table {
             return this.getColumn(name);
         }
         
-        Column column = new Column(this.database, this, name, type, position, List.of(), options);
+        Column column = new Column(this.database, this, name, type, position, foreignKey, options);
         addColumn(column);
         return column;
     }
@@ -100,6 +100,10 @@ public class Table {
     
     public Column getColumn(String columnName) {
         return this.columns.get(columnName.toLowerCase());
+    }
+    
+    public static Builder builder() {
+        return new Builder();
     }
     
     public static class Builder implements IBuilder<Table, Builder> {

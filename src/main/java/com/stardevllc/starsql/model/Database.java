@@ -115,14 +115,16 @@ public class Database {
                         }
                         int position = columnResults.getInt("ORDINAL_POSITION");
                         
-                        List<ForeignKey> columnForeignKeys = new ArrayList<>();
+                        ForeignKey foreignKey = null;
+                        
                         for (ForeignKey tableForeignKey : tableForeignKeys) {
-                            if (tableForeignKey.referencedTable().columnName().equalsIgnoreCase(name)) {
-                                columnForeignKeys.add(tableForeignKey);
+                            if (tableForeignKey.referenced().columnName().equalsIgnoreCase(name)) {
+                                foreignKey = tableForeignKey;
+                                break;
                             }
                         }
                         
-                        Column column = new Column(this, table, name, new Type(type, size), position, columnForeignKeys);
+                        Column column = new Column(this, table, name, new Type(type, size), position, foreignKey);
                         
                         String isNullable = columnResults.getString("IS_NULLABLE");
                         if (Objects.equals(isNullable, "YES")) {

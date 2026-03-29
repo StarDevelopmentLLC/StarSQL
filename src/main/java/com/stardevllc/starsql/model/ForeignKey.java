@@ -4,7 +4,7 @@ import com.stardevllc.starsql.statements.ColumnKey;
 
 import java.sql.DatabaseMetaData;
 
-public record ForeignKey(String name, ColumnKey primaryTable, ColumnKey referencedTable, Rule updateRule, Rule deleteRule) {
+public record ForeignKey(String name, ColumnKey primary, ColumnKey referenced, Rule updateRule, Rule deleteRule) {
     
     public enum Rule {
         NO_ACTION(DatabaseMetaData.importedKeyNoAction),

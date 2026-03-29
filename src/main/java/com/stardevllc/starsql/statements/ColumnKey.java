@@ -42,4 +42,14 @@ public record ColumnKey(String datasebaseName, String tableName, String columnNa
         result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
         return result;
     }
+    
+    @Override
+    public String toString() {
+        return "ColumnKey{" +
+                "datasebaseName='" + datasebaseName + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", columnName='" + columnName + '\'' +
+                ", alias='" + alias + '\'' +
+                '}';
+    }
 }

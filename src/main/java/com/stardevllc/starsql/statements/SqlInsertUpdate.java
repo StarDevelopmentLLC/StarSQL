@@ -1,5 +1,6 @@
 package com.stardevllc.starsql.statements;
 
+import com.stardevllc.starsql.model.Column;
 import com.stardevllc.starsql.model.Table;
 
 import java.util.List;
@@ -13,11 +14,17 @@ public class SqlInsertUpdate extends SqlInsert {
     }
     
     public SqlInsertUpdate(Table table) {
-        super(table);
+        this(table, false);
     }
 
     public SqlInsertUpdate(Table table, boolean allColumns) {
         super(table, allColumns);
+        for (Column column : table.getColumns().values()) {
+            if (column.isPrimaryKey()) {
+                primaryKeyColumn(column.getName());
+                break;
+            }
+        }
     }
 
     public SqlInsertUpdate primaryKeyColumn(String primaryKeyColumn) {
@@ -66,11 +73,11 @@ public class SqlInsertUpdate extends SqlInsert {
         if (primaryIndex == -1) {
             throw new IllegalArgumentException("No primary key column was set for an insert-update statement.");
         }
-
+        
         this.columns.remove(primaryIndex);
         List<Object> row = this.rows.getFirst();
         row.remove(primaryIndex);
-
+        
         for (int i = 0; i < this.columns.size(); i++) {
             ColumnKey column = this.columns.get(i);
             Object object = row.get(i);

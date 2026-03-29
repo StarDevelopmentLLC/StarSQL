@@ -1,7 +1,6 @@
 package com.stardevllc.starsql.statements;
 
-import com.stardevllc.starsql.model.Column;
-import com.stardevllc.starsql.model.ForeignKey;
+import com.stardevllc.starsql.model.*;
 
 import java.util.*;
 
@@ -10,11 +9,15 @@ public class CreateTable implements SqlStatement {
     private String name;
     private Map<String, Column> columns = new HashMap<>();
     
-    public CreateTable(String name, Set<Column> columns) {
+    public CreateTable(String name, Collection<Column> columns) {
         this.name = name;
         for (Column column : columns) {
             this.columns.put(column.getName().toLowerCase(), column);
         }
+    }
+    
+    public CreateTable(Table table) {
+        this(table.getName(), table.getColumns().values());
     }
     
     public CreateTable(String name) {
@@ -83,14 +86,14 @@ public class CreateTable implements SqlStatement {
             
             sb.append(", ");
             
-            if (column.getForeignKeys() != null && !column.getForeignKeys().isEmpty()) {
-                foreignKeys.addAll(column.getForeignKeys());
+            if (column.getForeignKey() != null) {
+                foreignKeys.add(column.getForeignKey());
             }
         }
         
         if (!foreignKeys.isEmpty()) {
             for (ForeignKey foreignKey : foreignKeys) {
-                sb.append("CONSTRAINT ").append(foreignKey.name()).append(" FOREIGN KEY (").append("`").append(foreignKey.referencedTable().columnName()).append("`) REFERENCES `").append(foreignKey.primaryTable().tableName()).append("`(`").append(foreignKey.primaryTable().columnName()).append("`) ").append("ON DELETE ").append(foreignKey.deleteRule().name().replace("_", " ")).append(" ON UPDATE ").append(foreignKey.updateRule().name().replace("_", " ")).append(", ");
+                sb.append("CONSTRAINT ").append(foreignKey.name()).append(" FOREIGN KEY (").append("`").append(foreignKey.primary().columnName()).append("`) REFERENCES `").append(foreignKey.referenced().tableName()).append("`(`").append(foreignKey.referenced().columnName()).append("`) ").append("ON DELETE ").append(foreignKey.deleteRule().name().replace("_", " ")).append(" ON UPDATE ").append(foreignKey.updateRule().name().replace("_", " ")).append(", ");
             }
         }
         
