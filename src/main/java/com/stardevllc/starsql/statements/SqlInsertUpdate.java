@@ -36,7 +36,12 @@ public class SqlInsertUpdate extends SqlInsert {
         this.primaryKeyColumn = columnKey;
         return this;
     }
-
+    
+    @Override
+    public SqlInsertUpdate data(Object... objects) {
+        return (SqlInsertUpdate) super.data(objects);
+    }
+    
     @Override
     public SqlInsertUpdate columns(String... columns) {
         return (SqlInsertUpdate) super.columns(columns);

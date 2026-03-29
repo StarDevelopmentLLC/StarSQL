@@ -46,6 +46,29 @@ public class SqlInsert implements SqlStatement {
 
         return this;
     }
+    
+    public SqlInsert data(Object... objects) {
+        if (objects == null || objects.length % 2 != 0) {
+            throw new IllegalArgumentException("Objects cannot be null and must be divisible by 2");
+        }
+        
+        List<Object> row = new LinkedList<>();
+        for (int i = 0; i < objects.length; i++) {
+            Object object = objects[i];
+            ColumnKey columnKey = switch (object) {
+                case Column column -> new ColumnKey(column.getName());
+                case ColumnKey ck -> ck;
+                case String str -> new ColumnKey(str);
+                case null, default -> throw new IllegalArgumentException("Argument " + i + " is an invalid type for the column. It must be a Column, ColumnKey or a String");
+            };
+            this.columns.add(columnKey);
+            row.add(objects[i + 1]);
+            i++;
+        }
+        
+        this.rows.add(row);
+        return this;
+    }
 
     public SqlInsert row(Object... values) {
         if (values != null) {
